@@ -12,7 +12,11 @@
       {
         "title": "bible-note",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "url": "read.html",
+        "maximized": true,
+        "fullscreen": false,
+        "decorations": true
       }
     ],
     "security": {

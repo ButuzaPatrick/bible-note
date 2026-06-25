@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bible Notes</title>
+  <link rel="stylesheet" href="/read.css">
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- SCREEN 1: Book List -->
+    <div id="screen-books" class="screen active">
+      <input id="search-bar" type="text" placeholder="Search books..." />
+      <div id="book-grid"><p class="loading">Loading books...</p></div>
+    </div>
+
+    <!-- SCREEN 2: Chapter List -->
+    <div id="screen-chapters" class="screen">
+      <div id="chapter-header">
+        <button class="back-btn" onclick="showBooks()">← Back</button>
+        <h2 id="chapter-title"></h2>
+      </div>
+      <div id="chapter-grid"></div>
+    </div>
+
+    <!-- SCREEN 3: Verse Reader -->
+    <div id="screen-reader" class="screen">
+      <div id="reader-header">
+        <button class="back-btn" onclick="showChapters()">← Back</button>
+        <h2 id="reader-title"></h2>
+      </div>
+      <div id="verse-list"></div>
+    </div>
+
+  </div>
+
+  <!-- FLOATING NAV BAR -->
+  <nav id="navbar">
+    <button class="nav-btn active" id="nav-read" onclick="navTo('read')">
+      <span class="nav-icon">📖</span>
+      Read
+    </button>
+    <button class="nav-btn" id="nav-portals" onclick="navTo('portals')">
+      <span class="nav-icon">🗂</span>
+      Portals
+    </button>
+    <!-- Add new nav buttons here -->
+  </nav>
+
+  <script src="read.js"></script>
+</body>
+</html>

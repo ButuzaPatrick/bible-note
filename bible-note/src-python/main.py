@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Depends # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from sqlmodel import Session, select
 from database import get_session, Verse, create_db
 

@@ -14,7 +14,7 @@ async function init() {
   for (const v of verses) {
     if (v.chapter !== currentChapter) {
       currentChapter = v.chapter;
-      html += `<span class="chapter-heading">${portal.book} — Chapter ${v.chapter}</span>`;
+      html += `<span class="chapter-heading">${portal.book} --- Chapter ${v.chapter}</span>`;
     }
     html += `
       <span class="verse" data-verse="${v.verse_number}" data-chapter="${v.chapter}">

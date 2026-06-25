@@ -7,14 +7,32 @@
     --border: #2e2e2e;
     --text: #e8e8e8;
     --text-muted: #888;
-    --accent: #7c6aff;
+    --accent: #ffdc6a;
+    --accent-hover: #bead72;
     --nav-height: 64px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
 
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Crimson Pro', Georgia, serif;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
     height: 100vh;
     overflow: hidden;
     display: flex;
@@ -67,7 +85,7 @@ h2 {
 
 .verse-number {
     font-size: 0.7rem;
-    color: var(--accent);
+    color: var(--text-muted);
     vertical-align: super;
     margin-right: 3px;
     font-family: sans-serif;

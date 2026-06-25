@@ -23,14 +23,16 @@ async function loadPortals() {
   }
 
   list.innerHTML = portals.map(p => `
-    <div class="portal-card" onclick="openPortal(${p.id})">
-      <div class="portal-card-info">
-        <h3>${p.title}</h3>
-        <p>${formatPassage(p)}</p>
+    <div class="portal-card-shell">
+      <div class="portal-card" onclick="openPortal(${p.id})">
+        <div class="portal-card-info">
+          <h3>${p.title}</h3>
+          <p>${formatPassage(p)}</p>
+        </div>
       </div>
-    </div>
-    <div class="portal-card-actions">
-        <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openDeleteModal(event, this)">Delete</button>
+      <div class="portal-card-actions">
+          <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openDeleteModal(event, this)">Delete</button>
+      </div>
     </div>
   `).join("");
 }

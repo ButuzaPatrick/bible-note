@@ -19,7 +19,7 @@
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Georgia', serif;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
     height: 100vh;
     overflow: hidden;
     display: flex;

@@ -2,7 +2,7 @@ const API = "http://localhost:8000";
 let currentBook = null;
 let currentChapter = null;
 
-// ── NAVIGATION ──
+// NAVIGATION
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -14,7 +14,7 @@ function navTo(tab) {
   if (tab === "read") showBooks();
 }
 
-// ── BOOKS ──
+// BOOKS
 async function showBooks() {
   showScreen("screen-books");
   const grid = document.getElementById("book-grid");
@@ -38,7 +38,7 @@ function renderBooks(books) {
   `).join("");
 }
 
-// ── CHAPTERS ──
+// CHAPTERS
 async function showChapters(abbrev, name) {
   if (abbrev) {
     currentBook = { abbrev, name };
@@ -54,7 +54,7 @@ async function showChapters(abbrev, name) {
   `).join("");
 }
 
-// ── READER ──
+// READER
 async function showReader(chapter) {
   currentChapter = chapter;
   showScreen("screen-reader");
@@ -69,5 +69,4 @@ async function showReader(chapter) {
   `).join("");
 }
 
-// ── INIT ──
 showBooks();

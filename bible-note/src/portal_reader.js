@@ -26,3 +26,5 @@ async function init() {
 
   document.getElementById("verse-list").innerHTML = html;
 }
+
+init()

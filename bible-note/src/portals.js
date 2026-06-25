@@ -97,7 +97,7 @@ async function deletePortal(event, id) {
 }
 
 function openPortal(id) {
-  location.href = `portal-reader.html?id=${id}`;
+  location.href = `portal_reader.html?id=${id}`;
 }
 
 init();

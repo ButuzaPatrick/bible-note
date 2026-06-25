@@ -108,7 +108,7 @@ h1 {
 #new-portal-btn:hover { opacity: 0.85; }
 
 /* ── MODAL ── */
-#modal-overlay {
+.modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
@@ -118,11 +118,11 @@ h1 {
     justify-content: center;
 }
 
-#modal-overlay.open {
+.modal-overlay.open {
     display: flex;
 }
 
-#modal {
+.modal {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -131,7 +131,7 @@ h1 {
     max-width: 90vw;
 }
 
-#modal h2 {
+.modal h2 {
     font-size: 1.3rem;
     font-weight: normal;
     margin-bottom: 1.5rem;
@@ -184,6 +184,20 @@ h1 {
     gap: 0.75rem;
     margin-top: 1.5rem;
 }
+
+.btn-delete {
+  background: #c0392b;
+  border: none;
+  color: white;
+  border-radius: 7px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: 'Crimson Pro', Georgia, serif;
+  transition: opacity 0.15s;
+}
+
+.btn-delete:hover { opacity: 0.85; }
 
 .btn-cancel {
     background: none;

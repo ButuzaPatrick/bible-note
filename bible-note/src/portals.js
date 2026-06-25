@@ -1,5 +1,6 @@
 const API = "http://localhost:8000";
 let books = [];
+let portalToDelete = null
 
 async function init() {
   books = await fetch(`${API}/books`).then(r => r.json());
@@ -27,9 +28,9 @@ async function loadPortals() {
         <h3>${p.title}</h3>
         <p>${formatPassage(p)}</p>
       </div>
-      <div class="portal-card-actions">
-        <button class="delete-btn" onclick="deletePortal(event, ${p.id})">Delete</button>
-      </div>
+    </div>
+    <div class="portal-card-actions">
+        <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openDeleteModal(event, this)">Delete</button>
     </div>
   `).join("");
 }
@@ -44,6 +45,25 @@ function formatPassage(p) {
     ref += `–${p.verse_end}`;
   }
   return ref;
+}
+
+function openDeleteModal(event, btn) {
+    event.stopPropagation();
+    portalToDelete = btn.dataset.id;
+    document.getElementById("delete-portal-name").textContent = btn.dataset.title;
+    document.getElementById("delete-modal-overlay").classList.add("open");
+}
+
+function closeDeleteModal() {
+    portalToDelete = null;
+    document.getElementById("delete-modal-overlay").classList.remove("open");
+}
+
+async function confirmDelete() {
+    if (!portalToDelete) return;
+    await fetch(`${API}/portals/${portalToDelete}`, { method: "DELETE" });
+    closeDeleteModal();
+    loadPortals();
 }
 
 function openModal() {
@@ -87,12 +107,6 @@ async function savePortal() {
   });
 
   closeModal();
-  loadPortals();
-}
-
-async function deletePortal(event, id) {
-  event.stopPropagation();
-  await fetch(`${API}/portals/${id}`, { method: "DELETE" });
   loadPortals();
 }
 

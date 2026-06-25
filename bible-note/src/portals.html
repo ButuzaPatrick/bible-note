@@ -14,8 +14,8 @@
 </div>
 
 <!-- CREATE PORTAL MODAL -->
-<div id="modal-overlay">
-  <div id="modal">
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
     <h2>New Study Portal</h2>
 
     <div class="field">
@@ -50,6 +50,20 @@
       <button class="btn-save" onclick="savePortal()">Create Portal</button>
     </div>
   </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="delete-modal-overlay">
+    <div class="modal">
+        <h2>Delete Portal</h2>
+        <p style="color: var(--text-muted); font-family: sans-serif; font-size: 0.95rem; margin-bottom: 1.5rem;">
+            Are you sure you want to delete <strong id="delete-portal-name" style="color: var(--text);"></strong>? This cannot be undone.
+        </p>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
 </div>
 
 <!-- NAV -->

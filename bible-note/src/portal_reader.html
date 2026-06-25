@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Portal Reader</title>
+  <link rel="stylesheet" href="/portal_reader.css">
+</head>
+<body>
+
+<div id="app">
+  <div id="portal-header">
+    <button class="back-btn" onclick="location.href='portals.html'">← Portals</button>
+    <h2 id="portal-title">Loading...</h2>
+  </div>
+  <div id="verse-list"><p class="loading">Loading passage...</p></div>
+</div>
+
+<nav id="navbar">
+  <button class="nav-btn" onclick="location.href='read.html'">
+    <span class="nav-icon">📖</span>
+    Read
+  </button>
+  <button class="nav-btn active" onclick="location.href='portals.html'">
+    <span class="nav-icon">🗂</span>
+    Portals
+  </button>
+</nav>
+
+<script src="portal_reader.js"></script>
+</body>
+</html>

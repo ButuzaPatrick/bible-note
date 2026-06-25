@@ -3,6 +3,8 @@ let currentBook = null;
 let currentChapter = null;
 
 // NAVIGATION
+
+// To display screens, make all inactive, then make selected one active
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");

@@ -24,6 +24,28 @@ class Portal(SQLModel, table=True):
     chapter_end: Optional[int] = None
     verse_end: Optional[int] = None
 
+class Layer(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    portal_id: int = Field(foreign_key="portal.id")
+    title: Optional[str] = None
+    colour: str = "#ffdc6a"
+    order: int = 0
+
+class Highlight(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    layer_id: int = Field(foreign_key="layer.id")
+    verse_id: int = Field(foreign_key="verse.id")
+    start_offset: Optional[int] = None
+    end_offset: Optional[int] = None
+    full_verse: bool = False
+
+class Note(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    highlight_id: int = Field(foreign_key="highlight.id")
+    content: str = ""
+    x: float = 100
+    y: float = 100
+
 def create_db():
     SQLModel.metadata.create_all(engine)
 

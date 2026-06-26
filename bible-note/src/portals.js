@@ -1,9 +1,8 @@
-const API = "http://localhost:8000";
 let books = [];
 let portalToDelete = null
 
 async function init() {
-  books = await fetch(`${API}/books`).then(r => r.json());
+  books = await BNApi.get('/books');
 
   const select = document.getElementById("modal-book");
   select.innerHTML = books.map(b =>
@@ -14,7 +13,7 @@ async function init() {
 }
 
 async function loadPortals() {
-  const portals = await fetch(`${API}/portals`).then(r => r.json());
+  const portals = await BNApi.get('/portals');
   const list = document.getElementById("portal-list");
 
   if (portals.length === 0) {
@@ -63,7 +62,7 @@ function closeDeleteModal() {
 
 async function confirmDelete() {
     if (!portalToDelete) return;
-    await fetch(`${API}/portals/${portalToDelete}`, { method: "DELETE" });
+    await BNApi.del(`/portals/${portalToDelete}`);
     closeDeleteModal();
     loadPortals();
 }
@@ -97,18 +96,14 @@ async function savePortal() {
     });
   }
 
-  await fetch(`${API}/portals`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      title,
-      book: bookName,
-      book_abbrev: abbrev,
-      chapter_start: chapterStart,
-      verse_start: verseStart,
-      chapter_end: chapterEnd,
-      verse_end: verseEnd
-    })
+  await BNApi.post('/portals', {
+    title,
+    book: bookName,
+    book_abbrev: abbrev,
+    chapter_start: chapterStart,
+    verse_start: verseStart,
+    chapter_end: chapterEnd,
+    verse_end: verseEnd
   });
 
   closeModal();

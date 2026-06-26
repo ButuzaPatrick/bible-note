@@ -1,4 +1,3 @@
-const API = "http://localhost:8000";
 let currentBook = null;
 let currentChapter = null;
 let currentTranslation = "ESV";
@@ -28,7 +27,7 @@ async function showBooks() {
   const grid = document.getElementById("book-grid");
   grid.innerHTML = `<p class="loading">Loading...</p>`;
 
-  const books = await fetch(`${API}/books?translation=${currentTranslation}`).then(r => r.json());
+  const books = await BNApi.get('/books', { translation: currentTranslation });
   renderBooks(books);
 
   document.getElementById("search-bar").oninput = (e) => {
@@ -54,7 +53,7 @@ async function showChapters(abbrev, name) {
   showScreen("screen-chapters");
   document.getElementById("chapter-title").textContent = currentBook.name;
 
-  const chapters = await fetch(`${API}/chapters/${currentBook.abbrev}?translation=${currentTranslation}`).then(r => r.json());
+  const chapters = await BNApi.get(`/chapters/${currentBook.abbrev}`, { translation: currentTranslation });
   document.getElementById("chapter-grid").innerHTML = chapters.map(c => `
     <div class="chapter-card" onclick="showReader(${c})">
       ${c}
@@ -68,7 +67,7 @@ async function showReader(chapter) {
   showScreen("screen-reader");
   document.getElementById("reader-title").textContent = `${currentBook.name} ${chapter}`;
 
-  const verses = await fetch(`${API}/verses/${currentBook.abbrev}/${chapter}?translation=${currentTranslation}`).then(r => r.json());
+  const verses = await BNApi.get(`/verses/${currentBook.abbrev}/${chapter}`, { translation: currentTranslation });
   document.getElementById("verse-list").innerHTML = verses.map(v => `
     <span class="verse" data-verse="${v.verse_number}">
       <span class="verse-number">${v.verse_number}</span>

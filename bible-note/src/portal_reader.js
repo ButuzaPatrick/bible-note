@@ -1,4 +1,3 @@
-const API = "http://localhost:8000";
 const params = new URLSearchParams(location.search);
 const portalId = params.get("id");
 console.log(portalId);
@@ -15,7 +14,7 @@ let layerToDelete = null;
 
 // ── INIT ──
 async function init() {
-  portal = await fetch(`${API}/portals/${portalId}`).then(r => r.json());
+  portal = await BNApi.get(`/portals/${portalId}`);
   document.getElementById("portal-title").textContent = portal.title;
   await loadVerses();
   await loadLayers();
@@ -37,7 +36,7 @@ function closeDeleteLayerModal() {
 
 async function confirmDeleteLayer() {
   if (!layerToDelete) return;
-  await fetch(`${API}/layers/${layerToDelete}`, { method: "DELETE" });
+  await BNApi.del(`/layers/${layerToDelete}`);
   if (activeLayer?.id === layerToDelete) {
     activeLayer = null;
     clearHighlightsUI();
@@ -49,7 +48,7 @@ async function confirmDeleteLayer() {
 
 // ── VERSES ──
 async function loadVerses() {
-  const verses = await fetch(`${API}/portals/${portalId}/verses`).then(r => r.json());
+  const verses = await BNApi.get(`/portals/${portalId}/verses`);
   let currentChapter = null;
   let html = "";
 
@@ -75,7 +74,7 @@ async function loadVerses() {
 
 // ── LAYERS ──
 async function loadLayers() {
-  layers = await fetch(`${API}/portals/${portalId}/layers`).then(r => r.json());
+  layers = await BNApi.get(`/portals/${portalId}/layers`);
   renderLayers();
   if (layers.length > 0 && !activeLayer) {
     await new Promise(r => setTimeout(r, 0));
@@ -100,14 +99,14 @@ async function setActiveLayer(layer) {
   renderLayers();
   clearHighlightsUI();
   clearNotesUI();
-  highlights = await fetch(`${API}/layers/${activeLayer.id}/highlights`).then(r => r.json());
+  highlights = await BNApi.get(`/layers/${activeLayer.id}/highlights`);
   renderHighlights();
   renderNotes();
 }
 
 async function deleteLayer(event, id) {
   event.stopPropagation();
-  await fetch(`${API}/layers/${id}`, { method: "DELETE" });
+  await BNApi.del(`/layers/${id}`);
   if (activeLayer?.id === id) {
     activeLayer = null;
     clearHighlightsUI();
@@ -140,11 +139,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function saveLayer() {
   const title = document.getElementById("layer-title-input").value.trim() || null;
-  const layer = await fetch(`${API}/portals/${portalId}/layers`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, colour: selectedColour, order: layers.length })
-  }).then(r => r.json());
+  const layer = await BNApi.post(`/portals/${portalId}/layers`, {
+    title,
+    colour: selectedColour,
+    order: layers.length
+  });
 
   closeLayerModal();
   await loadLayers();
@@ -169,11 +168,10 @@ function setupHighlighting() {
     const existing = highlights.find(h => h.verse_id === verseId && h.full_verse);
     if (existing) return;
 
-    const result = await fetch(`${API}/layers/${activeLayer.id}/highlights`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ verse_id: verseId, full_verse: true })
-    }).then(r => r.json());
+    const result = await BNApi.post(`/layers/${activeLayer.id}/highlights`, {
+      verse_id: verseId,
+      full_verse: true
+    });
 
     console.log("full result:", JSON.stringify(result));
 
@@ -206,11 +204,12 @@ function setupHighlighting() {
     justSelectedText = true;
     setTimeout(() => { justSelectedText = false; }, 100);
 
-    const result = await fetch(`${API}/layers/${activeLayer.id}/highlights`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ verse_id: verseId, start_offset: startOffset, end_offset: endOffset, full_verse: false })
-    }).then(r => r.json());
+    const result = await BNApi.post(`/layers/${activeLayer.id}/highlights`, {
+      verse_id: verseId,
+      start_offset: startOffset,
+      end_offset: endOffset,
+      full_verse: false
+    });
 
     highlights.push(result);
     applyHighlight(result);
@@ -364,15 +363,11 @@ function pulseHighlight(h) {
 }
 
 async function saveNote(noteId, content) {
-  await fetch(`${API}/notes/${noteId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content })
-  });
+  await BNApi.put(`/notes/${noteId}`, { content });
 }
 
 async function deleteHighlight(highlightId) {
-  await fetch(`${API}/highlights/${highlightId}`, { method: "DELETE" });
+  await BNApi.del(`/highlights/${highlightId}`);
   highlights = highlights.filter(h => h.id !== highlightId);
   clearHighlightsUI();
   clearNotesUI();
@@ -399,10 +394,9 @@ function makeDraggable(el, noteId) {
     const onUp = async () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onUp);
-      await fetch(`${API}/notes/${noteId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ x: parseFloat(el.style.left), y: parseFloat(el.style.top) })
+      await BNApi.put(`/notes/${noteId}`, {
+        x: parseFloat(el.style.left),
+        y: parseFloat(el.style.top)
       });
     };
 

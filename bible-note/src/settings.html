@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings</title>
+  <link rel="stylesheet" href="settings.css">
+  <!-- <link rel="stylesheet" href="read.css"> -->
+</head>
+<body>
+
+<div id="app">
+  <div id="settings-header">
+    <button class="back-btn" onclick="location.href='read.html'">← Back</button>
+    <h2>Appearance Settings</h2>
+  </div>
+
+  <div class="field color-row">
+    <div class="color-field">
+      <label>Background color</label>
+      <input type="color" id="bg-color" />
+    </div>
+    <div class="color-field">
+      <label>Surface color</label>
+      <input type="color" id="surface-color" />
+    </div>
+    <div class="color-field">
+      <label>Text color</label>
+      <input type="color" id="text-color" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Base font size</label>
+    <input type="range" id="font-size" min="12" max="20" /> <span id="font-size-label"></span>px
+  </div>
+
+  <div class="actions">
+    <button id="save-btn">Save</button>
+    <button id="reset-btn">Reset</button>
+  </div>
+
+  <h2>Preview</h2>
+  <div id="preview">
+    <h3>Sample Title</h3>
+    <p>Now if I do what I do not want, it is no longer I who do it, but sin that dwells within me. So I find it to be a law that when I want to do right, evil lies close at hand. For I delight in the law of God, in my inner being, but I see in my members another law waging war against the law of my mind and making me captive to the law of sin that dwells in my members. Wretched man that I am! Who will deliver me from this body of death? Thanks be to God through Jesus Christ our Lord!</p>
+  </div>
+</div>
+
+<script src="settings.js"></script>
+<script src="settings-apply.js"></script>
+</body>
+
+<!-- Toast notification -->
+<div id="settings-toast" class="toast" aria-live="polite" hidden>Saved</div>
+</html>
+</body>
+</html>

@@ -1,0 +1,295 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --border: #2e2e2e;
+    --text: #e8e8e8;
+    --text-muted: #888;
+    --accent: #ffdc6a;
+    --accent-hover: #bead72;
+    --nav-height: 64px;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#app {
+    flex: 1;
+    overflow-y: auto;
+    width: 70%;
+    padding: 2.5rem;
+    padding-top: 5rem;
+    padding-bottom: calc(var(--nav-height) + 2.5rem);
+}
+
+h1 {
+    font-size: 1.6rem;
+    font-weight: normal;
+    margin-bottom: 2rem;
+}
+
+.field {
+    margin-bottom: 1.75rem;
+}
+
+.color-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.color-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.field label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.field input[type="range"],
+.field input[type="text"],
+.field input[type="number"] {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+/* Minimal range slider */
+.field input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--border);
+    border-radius: 0;
+    padding: 0;
+    margin: 0.35rem 0;
+}
+.field input[type="range"]:focus { outline: none; }
+
+/* WebKit thumb */
+.field input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+/* Firefox */
+.field input[type="range"]::-moz-range-track { background: var(--border); height: 6px; }
+.field input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+/* IE */
+.field input[type="range"]::-ms-track { background: transparent; border-color: transparent; color: transparent; }
+.field input[type="range"]::-ms-thumb { width:14px; height:14px; background: var(--accent); border:none; }
+
+/* Make color pickers larger and fill their column */
+.color-field input[type="color"] {
+    width: 100%;
+    height: 48px;
+    padding: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    border-radius: 0;
+    appearance: none;
+}
+
+.field input:focus {
+    border-color: var(--accent);
+}
+
+#preview {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+#preview h3 {
+    font-weight: normal;
+    margin-bottom: 1rem;
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.actions button {
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 0.95rem;
+    border: none;
+    transition: opacity 0.15s, background 0.15s;
+}
+
+#save-btn {
+    background: var(--accent);
+    color: black;
+}
+
+#reset-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+}
+
+#save-btn:hover { opacity: 0.85; }
+#reset-btn:hover { background: var(--surface2); }
+
+/* Back button style matching the app's back button */
+.back-btn {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.4rem 0.85rem;
+    cursor: pointer;
+    margin: 1rem;
+    font-size: 0.85rem;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    transition: border-color 0.15s, color 0.15s;
+    z-index: 1001;
+}
+.back-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Header for settings page */
+#settings-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+#settings-header h2 {
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin-top: 4rem;
+}
+
+/* Toast */
+
+.toast {
+    position: fixed;
+    left: 12px;
+    top: 12px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    z-index: 2000;
+    box-shadow: none;
+    border-radius: 0;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 0.95rem;
+}
+
+.toast[hidden] { display: none; }
+
+
+/* ── NAV ── */
+#navbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: var(--nav-height);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 1rem;
+    z-index: 100;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-family: sans-serif;
+    padding: 0.5rem 1rem;
+    transition: color 0.15s, background 0.15s;
+}
+
+.nav-btn:hover {
+    color: var(--accent);
+    background: var(--surface2);
+}
+
+.nav-btn.active {
+    color: var(--accent);
+}
+
+.nav-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+    width: 20px;
+}
+
+#settings-btn {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 18px;
+}
+
+#settings-btn:hover { background: var(--surface2); }

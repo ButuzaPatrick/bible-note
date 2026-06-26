@@ -1,15 +1,16 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #242424;
-    --border: #2e2e2e;
-    --text: #e8e8e8;
-    --text-muted: #888;
-    --accent: #ffdc6a;
-    --accent-hover: #bead72;
-    --nav-height: 64px;
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --text: #e8e8e8;
+  --text-muted: #888;
+  --accent: #ffdc6a;
+  --accent-hover: #bead72;
+  --nav-height: 64px;
+  --sidebar-width: 220px;
 }
 
 ::-webkit-scrollbar {
@@ -221,7 +222,7 @@ h2 {
 }
 
 #sidebar.dimmed {
-  opacity: 0.25;
+  opacity: 0.5;
   transform: translateX(-60%);
 }
 
@@ -551,3 +552,23 @@ mark.active-highlight {
   outline-offset: 1px;
   transition: outline 0.2s;
 }
+
+/* Settings button (fixed top-right) */
+#settings-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 18px;
+}
+#settings-btn:hover { background: var(--surface2); }

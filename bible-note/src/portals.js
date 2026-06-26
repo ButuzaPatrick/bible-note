@@ -85,14 +85,17 @@ async function savePortal() {
   const verseStart = parseInt(document.getElementById("modal-verse-start").value) || null;
   const chapterEnd = parseInt(document.getElementById("modal-chapter-end").value) || null;
   const verseEnd = parseInt(document.getElementById("modal-verse-end").value) || null;
+  let title = document.getElementById("modal-title").value || null; 
 
-  const title = formatPassage({
-    book: bookName,
-    chapter_start: chapterStart,
-    verse_start: verseStart,
-    chapter_end: chapterEnd,
-    verse_end: verseEnd
-  });
+  if (!title) {
+    title = formatPassage({
+      book: bookName,
+      chapter_start: chapterStart,
+      verse_start: verseStart,
+      chapter_end: chapterEnd,
+      verse_end: verseEnd
+    });
+  }
 
   await fetch(`${API}/portals`, {
     method: "POST",

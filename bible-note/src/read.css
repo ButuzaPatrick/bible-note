@@ -200,14 +200,19 @@ h2 {
     transition: color 0.15s, background 0.15s;
 }
 
-.nav-btn:hover, .nav-btn.active {
+.nav-btn:hover {
     color: var(--accent);
     background: var(--surface2);
 }
 
-.nav-icon {
+.nav-btn.active {
+    color: var(--accent);
+}
+
+.nav-icon { 
     font-size: 1.3rem;
     line-height: 1;
+    width: 20px;
 }
 
 /* ── LOADING ── */

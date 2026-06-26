@@ -1,10 +1,16 @@
 const API = "http://localhost:8000";
 let currentBook = null;
 let currentChapter = null;
+let currentTranslation = "ESV";
+
+function setTranslation(t) {
+  currentTranslation = t;
+  document.querySelectorAll(".translation-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(`t-${t}`).classList.add("active");
+  showBooks();
+}
 
 // NAVIGATION
-
-// To display screens, make all inactive, then make selected one active
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -22,7 +28,7 @@ async function showBooks() {
   const grid = document.getElementById("book-grid");
   grid.innerHTML = `<p class="loading">Loading...</p>`;
 
-  const books = await fetch(`${API}/books`).then(r => r.json());
+  const books = await fetch(`${API}/books?translation=${currentTranslation}`).then(r => r.json());
   renderBooks(books);
 
   document.getElementById("search-bar").oninput = (e) => {
@@ -48,7 +54,7 @@ async function showChapters(abbrev, name) {
   showScreen("screen-chapters");
   document.getElementById("chapter-title").textContent = currentBook.name;
 
-  const chapters = await fetch(`${API}/chapters/${currentBook.abbrev}`).then(r => r.json());
+  const chapters = await fetch(`${API}/chapters/${currentBook.abbrev}?translation=${currentTranslation}`).then(r => r.json());
   document.getElementById("chapter-grid").innerHTML = chapters.map(c => `
     <div class="chapter-card" onclick="showReader(${c})">
       ${c}
@@ -62,7 +68,7 @@ async function showReader(chapter) {
   showScreen("screen-reader");
   document.getElementById("reader-title").textContent = `${currentBook.name} ${chapter}`;
 
-  const verses = await fetch(`${API}/verses/${currentBook.abbrev}/${chapter}`).then(r => r.json());
+  const verses = await fetch(`${API}/verses/${currentBook.abbrev}/${chapter}?translation=${currentTranslation}`).then(r => r.json());
   document.getElementById("verse-list").innerHTML = verses.map(v => `
     <span class="verse" data-verse="${v.verse_number}">
       <span class="verse-number">${v.verse_number}</span>

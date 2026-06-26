@@ -12,6 +12,7 @@ class Verse(SQLModel, table=True):
     chapter: int
     verse_number: int
     text: str
+    translation: str = "ESV"
 
 # To save portal data
 class Portal(SQLModel, table=True):

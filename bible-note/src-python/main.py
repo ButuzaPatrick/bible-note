@@ -29,23 +29,30 @@ def ping():
     return {"status": "ok"}
 
 @app.get("/books")
-def get_books(session: Session = Depends(get_session)):
-    books = session.exec(select(Verse.book, Verse.book_abbrev).distinct()).all()
+def get_books(translation: str = "ESV", session: Session = Depends(get_session)):
+    books = session.exec(
+        select(Verse.book, Verse.book_abbrev)
+        .where(Verse.translation == translation)
+        .distinct()
+    ).all()
     return [{"book": b[0], "abbrev": b[1]} for b in books]
 
 @app.get("/chapters/{book_abbrev}")
-def get_chapters(book_abbrev: str, session: Session = Depends(get_session)):
+def get_chapters(book_abbrev: str, translation: str = "ESV", session: Session = Depends(get_session)):
     chapters = session.exec(
-        select(Verse.chapter).where(Verse.book_abbrev == book_abbrev).distinct()
+        select(Verse.chapter)
+        .where(Verse.book_abbrev == book_abbrev, Verse.translation == translation)
+        .distinct()
     ).all()
     return sorted(chapters)
 
 @app.get("/verses/{book_abbrev}/{chapter}")
-def get_verses(book_abbrev: str, chapter: int, session: Session = Depends(get_session)):
+def get_verses(book_abbrev: str, chapter: int, translation: str = "ESV", session: Session = Depends(get_session)):
     verses = session.exec(
         select(Verse).where(
             Verse.book_abbrev == book_abbrev,
             Verse.chapter == chapter,
+            Verse.translation == translation
         ).order_by(Verse.verse_number)
     ).all()
     return verses
@@ -92,35 +99,34 @@ def delete_portal(portal_id: int, session: Session = Depends(get_session)):
     return {"ok": True}
 
 @app.get("/portals/{portal_id}/verses")
-def get_portal_verses(portal_id: int, session: Session = Depends(get_session)):
+def get_portal_verses(portal_id: int, translation: str = "ESV", session: Session = Depends(get_session)):
     portal = session.get(Portal, portal_id)
     if not portal:
         raise HTTPException(status_code=404, detail="Portal not found")
-    
-    query = select(Verse).where(Verse.book_abbrev == portal.book_abbrev)
-    
+
     chapter_end = portal.chapter_end or portal.chapter_start
-    verse_end = portal.verse_end
     verse_start = portal.verse_start
-    
-    # gets all verses within those chapters
+    verse_end = portal.verse_end
+
     verses = session.exec(
-        query.where(
+        select(Verse).where(
+            Verse.book_abbrev == portal.book_abbrev,
+            Verse.translation == translation,
             Verse.chapter >= portal.chapter_start,
             Verse.chapter <= chapter_end
         ).order_by(Verse.chapter, Verse.verse_number)
     ).all()
-    
-    def in_range(verse):
-        if verse.chapter == portal.chapter_start and verse_start:
-            if verse.verse_number < verse_start:
+
+    def in_range(v):
+        if v.chapter == portal.chapter_start and verse_start:
+            if v.verse_number < verse_start:
                 return False
-        if verse.chapter == chapter_end and verse_end:
-            if verse.verse_number > verse_end:
+        if v.chapter == chapter_end and verse_end:
+            if v.verse_number > verse_end:
                 return False
         return True
-    
-    return [verse for verse in verses if in_range(verse)]
+
+    return [v for v in verses if in_range(v)]
 
 # LAYERS
 

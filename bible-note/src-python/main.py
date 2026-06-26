@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from sqlmodel import Session, select
-from database import get_session, Verse, Portal, create_db
+from database import get_session, Verse, Portal, Layer, Highlight, Note, create_db
 from typing import Optional
 from pydantic import BaseModel
 
@@ -116,3 +116,107 @@ def get_portal_verses(portal_id: int, session: Session = Depends(get_session)):
         return True
     
     return [verse for verse in verses if in_range(verse)]
+
+# LAYERS
+
+class LayerCreate(BaseModel):
+    title: Optional[str] = None
+    colour: Optional[str] = "#ffdc6a"
+    order: Optional[int] = 0
+
+@app.get("/portals/{portal_id}/layers")
+def get_layers(portal_id: int, session: Session = Depends(get_session)):
+    return session.exec(
+        select(Layer).where(Layer.portal_id == portal_id).order_by(Layer.order)
+    ).all()
+
+@app.post("/portals/{portal_id}/layers")
+def create_layer(portal_id: int, data: LayerCreate, session: Session = Depends(get_session)):
+    layer = Layer(portal_id=portal_id, **data.model_dump())
+    session.add(layer)
+    session.commit()
+    session.refresh(layer)
+    return layer
+
+@app.delete("/layers/{layer_id}")
+def delete_layer(layer_id: int, session: Session = Depends(get_session)):
+    layer = session.get(Layer, layer_id)
+    if not layer:
+        raise HTTPException(status_code=404, detail="Layer not found")
+    session.delete(layer)
+    session.commit()
+    return { "ok": True }
+
+# HIGHLIGHTS
+
+class HighlightCreate(BaseModel):
+    verse_id: int
+    start_offset: Optional[int] = None
+    end_offset: Optional[int] = None
+    full_verse: bool = False
+
+@app.get("/layers/{layer_id}/highlights")
+def get_highlights(layer_id: int, session: Session = Depends(get_session)):
+    highlights = session.exec(
+        select(Highlight).where(Highlight.layer_id == layer_id)
+    ).all()
+    
+    result = []
+    for highlight in highlights:
+        note = session.exec(
+            select(Note).where(Note.highlight_id == highlight.id)
+        ).first()
+        result.append(
+            {**highlight.model_dump(), "note": note.model_dump() if note else None}
+        )
+    return result
+
+@app.post("/layers/{layer_id}/highlights")
+def create_highlight(layer_id: int, data: HighlightCreate, session: Session = Depends(get_session)):
+    highlight = Highlight(layer_id=layer_id, **data.model_dump())
+    session.add(highlight)
+    session.commit()
+    session.refresh(highlight)
+    note = Note(highlight_id=highlight.id, content="", x=100, y=100)
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return {**highlight.model_dump(), "note": note.model_dump()}
+
+@app.delete("/layers/{layer_id}/{highlight_id}")
+def delete_highlight(layer_id: int, highlight_id: int, session: Session = Depends(get_session)):
+    highlight = session.get(Highlight, highlight_id)
+    if not highlight:
+        raise HTTPException(status_code=404, detail="Highlight not found")
+    note = session.exec(
+        select(Note).where(Note.highlight_id == highlight.id).first()
+        )
+    if note:
+        session.delete(note)
+    session.delete(highlight)
+    session.commit()
+    return { "ok": True }
+
+# NOTES
+
+class NoteUpdate(BaseModel):
+    content: Optional[str] = None
+    x: Optional[float] = None
+    y: Optional[float] = None
+
+@app.put("/notes/{note_id}")
+def update_note(note_id: int, data: NoteUpdate, session: Session = Depends(get_session)):
+    note = session.get(Note, note_id)
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    if data.content is not None:
+        note.content = data.content
+    if data.x is not None:
+        note.x = data.x
+    if data.y is not None:
+        note.y = data.y
+    
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return note

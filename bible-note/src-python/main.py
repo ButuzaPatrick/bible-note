@@ -10,7 +10,12 @@ app = FastAPI()
 # bypass CORS blocking policy
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:1430", "http://127.0.0.1:1430"],
+    allow_origins=[
+        "http://localhost:1430",
+        "http://127.0.0.1:1430",
+        "http://localhost:8000",
+        "tauri://localhost",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -181,16 +186,25 @@ def create_highlight(layer_id: int, data: HighlightCreate, session: Session = De
     session.add(note)
     session.commit()
     session.refresh(note)
-    return {**highlight.model_dump(), "note": note.model_dump()}
+    return {
+        "id": highlight.id,
+        "layer_id": highlight.layer_id,
+        "verse_id": highlight.verse_id,
+        "start_offset": highlight.start_offset,
+        "end_offset": highlight.end_offset,
+        "full_verse": highlight.full_verse,
+        "note": note.model_dump()
+    }
 
-@app.delete("/layers/{layer_id}/{highlight_id}")
-def delete_highlight(layer_id: int, highlight_id: int, session: Session = Depends(get_session)):
+@app.delete("/highlights/{highlight_id}")
+def delete_highlight(highlight_id: int, session: Session = Depends(get_session)):
     highlight = session.get(Highlight, highlight_id)
+    print("deleting highlight")
     if not highlight:
         raise HTTPException(status_code=404, detail="Highlight not found")
     note = session.exec(
-        select(Note).where(Note.highlight_id == highlight.id).first()
-        )
+        select(Note).where(Note.highlight_id == highlight.id)
+        ).first()
     if note:
         session.delete(note)
     session.delete(highlight)

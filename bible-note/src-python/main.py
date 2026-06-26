@@ -61,6 +61,7 @@ def get_verses(book_abbrev: str, chapter: int, translation: str = "ESV", session
 
 # BaseModel validates the incoming data
 class PortalCreate(BaseModel):
+    """Payload for creating a reading portal."""
     title: str
     book: str
     book_abbrev: str
@@ -131,6 +132,7 @@ def get_portal_verses(portal_id: int, translation: str = "ESV", session: Session
 # LAYERS
 
 class LayerCreate(BaseModel):
+    """Payload for creating a layer."""
     title: Optional[str] = None
     colour: Optional[str] = "#ffdc6a"
     order: Optional[int] = 0
@@ -169,6 +171,7 @@ def delete_layer(layer_id: int, session: Session = Depends(get_session)):
 # HIGHLIGHTS
 
 class HighlightCreate(BaseModel):
+    """Payload for creating a highlight and its initial note position."""
     verse_id: int
     start_offset: Optional[int] = None
     end_offset: Optional[int] = None
@@ -232,6 +235,7 @@ def delete_highlight(highlight_id: int, session: Session = Depends(get_session))
 # NOTES
 
 class NoteUpdate(BaseModel):
+    """Payload for updating note content and saved UI position."""
     content: Optional[str] = None
     x: Optional[float] = None
     y: Optional[float] = None

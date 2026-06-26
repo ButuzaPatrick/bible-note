@@ -250,7 +250,7 @@ function setupHighlighting() {
     addHighlightToState(result);
   });
 
-  document.addEventListener("mouseup", async () => {
+  document.addEventListener("mouseup", async (event) => {
     if (!activeLayer) return;
 
     mouse_x = event.clientX;

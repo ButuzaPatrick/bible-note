@@ -57,6 +57,20 @@
   </div>
 </div>
 
+<!-- DELETE LAYER MODAL -->
+<div class="modal-overlay" id="delete-layer-modal-overlay">
+  <div class="modal">
+    <h2>Delete Layer</h2>
+    <p style="color: var(--text-muted); font-family: sans-serif; font-size: 0.95rem; margin-bottom: 1.5rem;">
+      Are you sure you want to delete <strong id="delete-layer-name" style="color: var(--text);"></strong>? All highlights and notes on this layer will be permanently deleted.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDeleteLayerModal()">Cancel</button>
+      <button class="btn-delete" onclick="confirmDeleteLayer()">Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav id="navbar">
   <button class="nav-btn" onclick="location.href='read.html'">

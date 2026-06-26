@@ -10,6 +10,8 @@ let highlights = [];
 let selectedColour = "#7c6aff";
 let justSelectedText = false;
 let verseTextCache = {};
+let layerToDelete = null;
+
 
 // ── INIT ──
 async function init() {
@@ -19,6 +21,30 @@ async function init() {
   await loadLayers();
   setupSidebarBehaviour();
   setupHighlighting();
+}
+
+function openDeleteLayerModal(event, id, title) {
+  event.stopPropagation();
+  layerToDelete = id;
+  document.getElementById("delete-layer-name").textContent = title || "Untitled";
+  document.getElementById("delete-layer-modal-overlay").classList.add("open");
+}
+
+function closeDeleteLayerModal() {
+  layerToDelete = null;
+  document.getElementById("delete-layer-modal-overlay").classList.remove("open");
+}
+
+async function confirmDeleteLayer() {
+  if (!layerToDelete) return;
+  await fetch(`${API}/layers/${layerToDelete}`, { method: "DELETE" });
+  if (activeLayer?.id === layerToDelete) {
+    activeLayer = null;
+    clearHighlightsUI();
+    clearNotesUI();
+  }
+  closeDeleteLayerModal();
+  await loadLayers();
 }
 
 // ── VERSES ──
@@ -64,7 +90,7 @@ function renderLayers() {
          onclick="setActiveLayer(${JSON.stringify(l).replace(/"/g, '&quot;')})">
       <div class="layer-dot" style="background:${l.colour}"></div>
       <span class="layer-pill-label">${l.title || 'Untitled'}</span>
-      <button class="layer-delete" onclick="deleteLayer(event, ${l.id})">✕</button>
+      <button class="layer-delete" onclick="openDeleteLayerModal(event, ${l.id}, '${l.title || ''}')">✕</button>
     </div>
   `).join("");
 }
@@ -222,7 +248,7 @@ function applyHighlight(h) {
     const before = raw.slice(0, h.start_offset);
     const marked = raw.slice(h.start_offset, h.end_offset);
     const after = raw.slice(h.end_offset);
-    textEl.innerHTML = `${before}<mark style="background:${colour}44;border-radius:3px;padding:0 2px;">${marked}</mark>${after}`;
+    textEl.innerHTML = `${before}<mark style="background:${colour}44;border-radius:3px;padding:0 2px;color:inherit;">${marked}</mark>${after}`;
   }
 }
 

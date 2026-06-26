@@ -148,9 +148,17 @@ def delete_layer(layer_id: int, session: Session = Depends(get_session)):
     layer = session.get(Layer, layer_id)
     if not layer:
         raise HTTPException(status_code=404, detail="Layer not found")
+    
+    highlights = session.exec(select(Highlight).where(Highlight.layer_id == layer_id)).all()
+    for highlight in highlights:
+        note = session.exec(select(Note).where(Note.highlight_id == highlight.id)).first()
+        if note:
+            session.delete(note)
+        session.delete(highlight)
+    
     session.delete(layer)
     session.commit()
-    return { "ok": True }
+    return {"ok": True}
 
 # HIGHLIGHTS
 

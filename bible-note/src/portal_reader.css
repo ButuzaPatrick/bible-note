@@ -117,22 +117,10 @@ h2 {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-  --bg: #0f0f0f;
-  --surface: #1a1a1a;
-  --surface2: #242424;
-  --border: #2e2e2e;
-  --text: #e8e8e8;
-  --text-muted: #888;
-  --accent: #7c6aff;
-  --nav-height: 64px;
-  --sidebar-width: 220px;
-}
-
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   height: 100vh;
   overflow: hidden;
   display: flex;
@@ -204,7 +192,7 @@ h2 {
 
 .verse-number {
   font-size: 0.7rem;
-  color: var(--accent);
+  color: var(--text-muted);
   vertical-align: super;
   margin-right: 3px;
   font-family: sans-serif;
@@ -257,11 +245,10 @@ h2 {
   background: #c0392b;
   border: none;
   color: white;
-  border-radius: 7px;
   padding: 0.6rem 1.2rem;
   cursor: pointer;
   font-size: 0.95rem;
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   transition: opacity 0.15s;
 }
 
@@ -394,7 +381,7 @@ h2 {
   background: none;
   border: none;
   color: var(--text);
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 0.9rem;
   resize: none;
   outline: none;
@@ -451,7 +438,7 @@ h2 {
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 0.95rem;
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   outline: none;
   transition: border-color 0.15s;
 }
@@ -489,17 +476,21 @@ h2 {
   padding: 0.6rem 1.2rem;
   cursor: pointer;
   font-size: 0.95rem;
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.btn-cancel:hover {
+  background-color: var(--surface2);
 }
 
 .btn-save {
   background: var(--accent);
   border: none;
-  color: white;
+  color: black;
   padding: 0.6rem 1.2rem;
   cursor: pointer;
   font-size: 0.95rem;
-  font-family: 'Crimson Pro', Georgia, serif;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .btn-save:hover { opacity: 0.85; }

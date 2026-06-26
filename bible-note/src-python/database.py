@@ -44,7 +44,7 @@ class Note(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     highlight_id: int = Field(foreign_key="highlight.id")
     content: str = ""
-    x: float = 100
+    x: float = 1200
     y: float = 100
 
 def create_db():

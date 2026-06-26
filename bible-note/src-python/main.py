@@ -173,6 +173,8 @@ class HighlightCreate(BaseModel):
     start_offset: Optional[int] = None
     end_offset: Optional[int] = None
     full_verse: bool = False
+    mouse_x: Optional[float] = None
+    mouse_y: Optional[float] = None
 
 @app.get("/layers/{layer_id}/highlights")
 def get_highlights(layer_id: int, session: Session = Depends(get_session)):
@@ -192,11 +194,13 @@ def get_highlights(layer_id: int, session: Session = Depends(get_session)):
 
 @app.post("/layers/{layer_id}/highlights")
 def create_highlight(layer_id: int, data: HighlightCreate, session: Session = Depends(get_session)):
-    highlight = Highlight(layer_id=layer_id, **data.model_dump())
+    payload = data.model_dump()
+    print(payload)
+    highlight = Highlight(layer_id=layer_id, **payload)
     session.add(highlight)
     session.commit()
     session.refresh(highlight)
-    note = Note(highlight_id=highlight.id, content="", x=100, y=100)
+    note = Note(highlight_id=highlight.id, content="", x=payload.get("mouse_x") or 1200, y=payload.get("mouse_y") or 100)
     session.add(note)
     session.commit()
     session.refresh(note)

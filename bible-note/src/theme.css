@@ -1,0 +1,254 @@
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* CENTRALIZED THEME & BASE STYLES */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── RESET ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── THEME COLORS ── */
+:root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --border: #2e2e2e;
+    --text: #e8e8e8;
+    --text-muted: #888;
+    --accent: #ffdc6a;
+    --accent-hover: #bead72;
+    --nav-height: 64px;
+    --sidebar-width: 220px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* ── BASE TYPOGRAPHY ── */
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+p {
+    white-space: pre-line;
+}
+
+a {
+    color: var(--accent-hover);
+}
+
+a:hover {
+    color: var(--accent);
+}
+
+mark {
+    background: none;
+    color: inherit;
+}
+
+/* ── COMMON BUTTONS ── */
+.back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.4rem 0.85rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: sans-serif;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.back-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-delete {
+    background: #c0392b;
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    transition: opacity 0.15s;
+}
+
+.btn-delete:hover {
+    opacity: 0.85;
+}
+
+.btn-cancel {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.btn-cancel:hover {
+    background-color: var(--surface2);
+}
+
+.btn-save {
+    background: var(--accent);
+    border: none;
+    color: black;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.btn-save:hover {
+    opacity: 0.85;
+}
+
+/* ── FORM ELEMENTS ── */
+.field {
+    margin-bottom: 1rem;
+}
+
+.field label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: sans-serif;
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--accent);
+}
+
+.field select option {
+    background: var(--surface2);
+}
+
+/* ── NAVIGATION BAR ── */
+#navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 1rem;
+    z-index: 100;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-family: sans-serif;
+    padding: 0.5rem 1rem;
+    transition: color 0.15s, background 0.15s;
+}
+
+.nav-btn:hover {
+    color: var(--accent);
+    background: var(--surface2);
+}
+
+.nav-btn.active {
+    color: var(--accent);
+}
+
+.nav-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+    width: 20px;
+}
+
+/* ── SETTINGS BUTTON ── */
+#settings-btn {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 18px;
+}
+
+#settings-btn:hover {
+    background: var(--surface2);
+}
+
+/* ── UTILITY CLASSES ── */
+.loading {
+    color: var(--text-muted);
+    font-family: sans-serif;
+    padding: 2rem 0;
+}
+
+.empty {
+    color: var(--text-muted);
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    padding: 2rem 0;
+}
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}

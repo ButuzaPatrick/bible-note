@@ -13,7 +13,7 @@ from routers.read import router as read_router
 
 app = FastAPI()
 
-# bypass CORS blocking policy
+# bypass silly CORS blocking policy
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[

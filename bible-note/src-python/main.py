@@ -12,6 +12,7 @@ import json
 import random
 import threading
 from concurrent.futures import ThreadPoolExecutor
+from functools import lru_cache
 
 app = FastAPI()
 
@@ -297,9 +298,14 @@ def get_commentary(book: str, chapter: int, session: Session = Depends(get_sessi
         "content": content,
     }
 
-# returns list of json video metadata 
+# returns list of json video metadata
+@lru_cache(maxsize=256)
 def search_youtube(url: str, max_results: int):
-    return YoutubeSearch(url, max_results=max_results).videos
+    try:
+        return YoutubeSearch(url, max_results=max_results).videos
+    except Exception as e:
+        print(f"Search failed for '{url}': {e}")
+        return []
 
 @app.get("/sermons/{book}/{chapter}")
 def get_sermons(book: str, chapter: int):

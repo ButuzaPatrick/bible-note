@@ -10,3 +10,7 @@ tidy:
 	@echo "formating complete"
 	@echo "linting..."
 	ruff check .
+
+db-migrate:
+	venv\Scripts\alembic revision --autogenerate -m "$(message)"
+	venv\Scripts\alembic upgrade head

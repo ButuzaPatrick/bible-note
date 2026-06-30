@@ -16,6 +16,8 @@ let mouse_x = 0;
 let mouse_y = 0;
 let commentaryCache = {};
 let commentaryScrollPositions = {};
+let sermonsCache = {};
+let sermonsScrollPositions = {};
 
 function setPortalState(nextPortal) {
   portal = nextPortal;
@@ -544,6 +546,8 @@ async function toggleTool(tool) {
 
   if (tool === "commentary") {
     await loadCommentary();
+  } else if (tool === "sermons") {
+    await loadSermons();
   }
 }
 
@@ -575,6 +579,55 @@ async function loadCommentary() {
 
   document.getElementById("tool-panel-title").textContent = `The Enduring Word - ${data.book} ${chapter}`;
   contentEl.innerHTML = `<p>${data.content}</p>`;
+}
+
+async function loadSermons() {
+  if (!portal) return;
+  const chapter = portal.chapter_start;
+  const cacheKey = `${portal.book_abbrev}-${chapter}`;
+
+  const contentEl = document.getElementById("tool-panel-content");
+
+  if (sermonsCache[cacheKey]) {
+    document.getElementById("tool-panel-title").textContent = `Sermons - ${portal.book} ${chapter}`;
+    contentEl.innerHTML = renderSermonsHtml(sermonsCache[cacheKey]);
+    contentEl.scrollTop = sermonsScrollPositions[cacheKey] || 0;
+    return;
+  }
+
+  document.getElementById("tool-panel-title").textContent = "Loading...";
+  contentEl.innerHTML = `<p>Loading...</p>`;
+
+  const data = await BNApi.get(`/sermons/${portal.book_abbrev}/${chapter}`);
+  sermonsCache[cacheKey] = data.videos;
+
+  document.getElementById("tool-panel-title").textContent = `Sermons - ${portal.book} ${chapter}`;
+
+  if (data.videos.length === 0) {
+    contentEl.innerHTML = `<p>No sermons found for this chapter.</p>`;
+    return;
+  }
+
+  contentEl.innerHTML = renderSermonsHtml(data.videos);
+}
+
+function renderSermonsHtml(videos) {
+  return videos.map(v => `
+    <div class="sermon-item">
+      <h4>${v.title}</h4>
+      <p class="sermon-meta">${v.channel} • ${v.duration || ""}</p>
+      ${v.embed_html}
+    </div>
+  `).join("");
+}
+
+function setupSermonsScrollTracking() {
+  const contentEl = document.getElementById("tool-panel-content");
+  contentEl.addEventListener("scroll", () => {
+    if (!portal || activeTool !== "sermons") return;
+    const cacheKey = `${portal.book_abbrev}-${portal.chapter_start}`;
+    sermonsScrollPositions[cacheKey] = contentEl.scrollTop;
+  });
 }
 
 function setupCommentaryScrollTracking() {

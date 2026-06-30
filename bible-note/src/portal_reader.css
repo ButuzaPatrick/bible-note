@@ -693,3 +693,27 @@ mark.active-highlight {
   line-height: 1.7;
   font-family: var(--font-reading, Georgia, serif);
 }
+
+.sermon-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sermon-item h4 {
+  font-weight: normal;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  color: var(--text);
+}
+
+.sermon-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.sermon-item iframe {
+  border-radius: 6px;
+}

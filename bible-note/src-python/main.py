@@ -9,6 +9,8 @@ from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
 from youtube_search import YoutubeSearch
+import json
+import random
 
 app = FastAPI()
 
@@ -293,8 +295,7 @@ def get_commentary(book: str, chapter: int, session: Session = Depends(get_sessi
     for p in paragraphs:
         if "AI" not in str(p):
             p_text.append(str(p))
-    
-    print(p_text)
+
     content = "<br>".join(p_text)
 
     return {
@@ -306,5 +307,29 @@ def get_commentary(book: str, chapter: int, session: Session = Depends(get_sessi
 @app.get("/sermons/{book}/{chapter}")
 def get_sermons(book: str, chapter: int):
     # results = YoutubeSearch('john macarthur romans 7', max_results=10).to_json()
+    
+    JM_sermons = json.loads(YoutubeSearch(f'john macarthur {book} {chapter}', max_results=4).to_json())["videos"]
+    TGC_sermons = json.loads(YoutubeSearch(f'the gospel coalition {book} {chapter}', max_results=4).to_json())["videos"]
+    LIG_sermons = json.loads(YoutubeSearch(f'ligoneer ministries {book} {chapter}', max_results=4).to_json())["videos"]
+
+    
+    sermons = JM_sermons + TGC_sermons + LIG_sermons
+    random.shuffle(sermons)
+    
+    return {
+        "book_abbrev": book,
+        "chapter": chapter,
+        "videos": [
+            {
+                "video_id": s["id"],
+                "title": s["title"],
+                "channel": s["channel"],
+                "duration": s["duration"],
+                "thumbnail": s["thumbnails"][0],
+                "embed_html": f'<iframe width="fit-content" height="200" src="https://www.youtube.com/embed/{s["id"]}" frameborder="0" allowfullscreen></iframe>'
+            }
+            for s in sermons
+        ]
+    }
     
     pass

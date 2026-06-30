@@ -238,6 +238,7 @@ function setupHighlighting() {
     }
   });
 
+  // deals with clicking a verse to highlight it
   verseList.addEventListener("click", async (e) => {
     if (justSelectedText) return;
     const verse = e.target.closest(".verse");
@@ -268,6 +269,7 @@ function setupHighlighting() {
     addHighlightToState(result);
   });
 
+  // deals with dragging selection to highlight a verse
   document.addEventListener("mouseup", async (event) => {
     if (!activeLayer) return;
 

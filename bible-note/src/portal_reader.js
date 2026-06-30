@@ -548,6 +548,8 @@ async function toggleTool(tool) {
     await loadCommentary();
   } else if (tool === "sermons") {
     await loadSermons();
+  } else if (tool === "search") {
+    await loadSearch();
   }
 }
 
@@ -637,6 +639,78 @@ function setupCommentaryScrollTracking() {
     const cacheKey = `${portal.book_abbrev}-${portal.chapter_start}`;
     commentaryScrollPositions[cacheKey] = contentEl.scrollTop;
   });
+}
+
+async function loadSearch() {
+  const contentEl = document.getElementById("tool-panel-content");
+  document.getElementById("tool-panel-title").textContent = "Search";
+
+  contentEl.innerHTML = `
+    <input id="panel-search-input" type="text" placeholder="Search verses and notes..." autofocus />
+    <div id="panel-search-results"><p class="empty">Type something to search.</p></div>
+  `;
+
+  const input = document.getElementById("panel-search-input");
+  let searchTimeout = null;
+
+  input.addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+    const query = input.value.trim();
+    const resultsEl = document.getElementById("panel-search-results");
+
+    if (query.length === 0) {
+      resultsEl.innerHTML = `<p class="empty">Type something to search.</p>`;
+      return;
+    }
+
+    searchTimeout = setTimeout(() => runPanelSearch(query), 300);
+  });
+}
+
+async function runPanelSearch(query) {
+  const resultsEl = document.getElementById("panel-search-results");
+  resultsEl.innerHTML = `<p class="empty">Searching...</p>`;
+
+  const data = await BNApi.get(`/search/${encodeURIComponent(query)}`);
+
+  if (data.verses.length === 0 && data.notes.length === 0) {
+    resultsEl.innerHTML = `<p class="empty">No results found for "${query}".</p>`;
+    return;
+  }
+
+  let html = "";
+
+  if (data.notes.length > 0) {
+    html += `<h4 class="results-heading">Notes (${data.notes.length})</h4>`;
+    html += data.notes.map(n => `
+      <div class="result-card" onclick="goToSearchResult('${n.verse.book_abbrev}', ${n.verse.chapter})">
+        <span class="result-ref">${n.verse.book} ${n.verse.chapter}:${n.verse.verse_number}</span>
+        <p class="result-text">${highlightMatch(n.content, query)}</p>
+        <p class="result-meta">Note on: ${n.verse.text}</p>
+      </div>
+    `).join("");
+  }
+
+  if (data.verses.length > 0) {
+    html += `<h4 class="results-heading">Verses (${data.verses.length})</h4>`;
+    html += data.verses.map(v => `
+      <div class="result-card" onclick="goToSearchResult('${v.book_abbrev}', ${v.chapter})">
+        <span class="result-ref">${v.book} ${v.chapter}:${v.verse_number}</span>
+        <p class="result-text">${highlightMatch(v.text, query)}</p>
+      </div>
+    `).join("");
+  }
+
+  resultsEl.innerHTML = html;
+}
+
+function highlightMatch(text, query) {
+  const regex = new RegExp(`(${query})`, "ig");
+  return text.replace(regex, `<mark>$1</mark>`);
+}
+
+function goToSearchResult(bookAbbrev, chapter) {
+  location.href = `read.html?book=${bookAbbrev}&chapter=${chapter}`;
 }
 
 init();

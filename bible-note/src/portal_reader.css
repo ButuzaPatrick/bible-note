@@ -717,3 +717,66 @@ mark.active-highlight {
 .sermon-item iframe {
   border-radius: 6px;
 }
+
+#panel-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+  margin-bottom: 1.25rem;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+#panel-search-input:focus {
+  border-color: var(--accent);
+}
+
+.results-heading {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 1rem 0 0.5rem;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.result-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.result-card:hover {
+  border-color: var(--accent);
+}
+
+.result-ref {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.result-text {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.result-text mark {
+  background: var(--accent);
+  color: black;
+  padding: 0 2px;
+}
+
+.result-meta {
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

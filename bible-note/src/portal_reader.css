@@ -243,7 +243,7 @@ h2 {
 
 .note-box {
   position: absolute;
-  width: 200px;
+  width: 300px;
   min-height: 80px;
   background: var(--surface);
   padding: 0.75rem;

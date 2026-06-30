@@ -10,3 +10,5 @@ class Note(SQLModel, table=True):
     content: str = ""
     x: float = 1200
     y: float = 100
+    width: Optional[float] = Field(default=200.0)
+    height: Optional[float] = Field(default=100.0)

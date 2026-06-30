@@ -12,5 +12,11 @@ tidy:
 	ruff check .
 
 db-migrate:
-	venv\Scripts\alembic revision --autogenerate -m "$(message)"
-	venv\Scripts\alembic upgrade head
+	venv/Scripts/alembic revision --autogenerate -m "$(message)"
+	venv/Scripts/alembic upgrade head
+
+db-upgrade:
+	venv/Scripts/alembic upgrade head
+
+db-revision:
+	venv/Scripts/alembic revision --autogenerate -m "$(msg)"

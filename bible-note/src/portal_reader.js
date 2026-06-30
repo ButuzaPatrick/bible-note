@@ -709,6 +709,7 @@ function highlightMatch(text, query) {
   return text.replace(regex, `<mark>$1</mark>`);
 }
 
+// CURRENTLY DOES NOT REDIRECT PROPERLY TO PASSAGE, BETTER TO HAVE A POP-UP?
 function goToSearchResult(bookAbbrev, chapter) {
   location.href = `read.html?book=${bookAbbrev}&chapter=${chapter}`;
 }

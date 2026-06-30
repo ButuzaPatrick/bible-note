@@ -1,37 +1,8 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* SCROLLBAR */
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
-:root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #242424;
-    --border: #2e2e2e;
-    --text: #e8e8e8;
-    --text-muted: #888;
-    --accent: #ffdc6a;
-    --accent-hover: #bead72;
-    --nav-height: 64px;
-}
-
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* ── MAIN CONTENT ── */
 #app {
     flex: 1;
     align-items: center;
@@ -42,11 +13,9 @@ body {
     width: 70%;
 }
 
-/* ── SCREENS ── */
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* ── BOOK LIST ── */
 #search-bar {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -83,27 +52,11 @@ body {
     background: var(--surface2);
 }
 
-/* ── CHAPTER LIST ── */
 #chapter-header {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
-}
-
-.back-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    padding: 0.4rem 0.85rem;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: border-color 0.15s, color 0.15s;
-}
-
-.back-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
 }
 
 h2 {
@@ -133,7 +86,6 @@ h2 {
     background: var(--surface2);
 }
 
-/* ── VERSE READER ── */
 #reader-header {
     display: flex;
     align-items: center;
@@ -168,77 +120,3 @@ h2 {
 .verse-text {
     font-size: 1.05rem;
 }
-
-/* ── NAV BAR ── */
-#navbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--nav-height);
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 0 1rem;
-    z-index: 100;
-}
-
-.nav-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    font-size: 0.7rem;
-    font-family: sans-serif;
-    padding: 0.5rem 1rem;
-    transition: color 0.15s, background 0.15s;
-}
-
-.nav-btn:hover {
-    color: var(--accent);
-    background: var(--surface2);
-}
-
-.nav-btn.active {
-    color: var(--accent);
-}
-
-.nav-icon { 
-    font-size: 1.3rem;
-    line-height: 1;
-    width: 20px;
-}
-
-/* ── LOADING ── */
-.loading {
-    color: var(--text-muted);
-    text-align: center;
-    padding: 3rem;
-    font-family: sans-serif;
-}
-
-/* Settings button (fixed top-right) */
-#settings-btn {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    background: var(--surface);
-    color: var(--text);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 1000;
-    font-size: 18px;
-}
-#settings-btn:hover { background: var(--surface2); }

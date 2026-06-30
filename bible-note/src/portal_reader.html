@@ -7,16 +7,17 @@
   <link rel="stylesheet" href="/theme.css">
 </head>
 <body>
+  
+<!-- LAYER SIDEBAR -->
+<div id="sidebar" class="dimmed">
+  <div id="sidebar-inner">
+    <div id="layer-list"></div>
+    <button id="add-layer-btn" onclick="openLayerModal()">+</button>
+  </div>
+</div>
 
 <div id="layout">
 
-  <!-- LAYER SIDEBAR -->
-  <div id="sidebar" class="dimmed">
-    <div id="sidebar-inner">
-      <div id="layer-list"></div>
-      <button id="add-layer-btn" onclick="openLayerModal()">+</button>
-    </div>
-  </div>
 
   <!-- MAIN READER -->
   <div id="app">
@@ -28,10 +29,7 @@
 
     <!-- NOTES LAYER — floats above everything -->
     <div id="notes-layer"></div>
-  </div>
-
-  <button id="settings-btn" title="Settings" onclick="location.href='settings.html'">⚙︎</button>
-  
+  </div>  
 
 </div>
 
@@ -91,7 +89,6 @@
   </div>
 </div>
 
-<script src="settings-apply.js"></script>
 <script src="api.js"></script>
 <script src="portal_reader.js"></script>
 </body>

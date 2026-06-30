@@ -62,6 +62,7 @@ h2 {
   flex: 1;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 #app {
@@ -80,22 +81,6 @@ h2 {
   align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
-}
-
-.back-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 0.4rem 0.85rem;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-family: sans-serif;
-  transition: border-color 0.15s, color 0.15s;
-}
-
-.back-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 h2 {
@@ -138,7 +123,6 @@ h2 {
   padding: 0 2px;
 }
 
-/* ── SIDEBAR ── */
 #sidebar {
   position: absolute;
   left: 0;
@@ -173,19 +157,6 @@ h2 {
   width: 100%;
   min-height: 120px;
 }
-
-.btn-delete {
-  background: #c0392b;
-  border: none;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  transition: opacity 0.15s;
-}
-
-.btn-delete:hover { opacity: 0.85; }
 
 #layer-list {
   display: flex;
@@ -262,7 +233,6 @@ h2 {
   color: var(--accent);
 }
 
-/* ── NOTES ── */
 #notes-layer {
   position: absolute;
   inset: 0;
@@ -323,7 +293,6 @@ h2 {
   width: 100%;
 }
 
-/* ── MODAL ── */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -402,77 +371,6 @@ h2 {
   margin-top: 1.5rem;
 }
 
-.btn-cancel {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 0.6rem 1.2rem;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-}
-
-.btn-cancel:hover {
-  background-color: var(--surface2);
-}
-
-.btn-save {
-  background: var(--accent);
-  border: none;
-  color: black;
-  padding: 0.6rem 1.2rem;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-}
-
-.btn-save:hover { opacity: 0.85; }
-
-/* ── NAV ── */
-#navbar {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: var(--nav-height);
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 0 1rem;
-  z-index: 100;
-}
-
-.nav-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  font-size: 0.7rem;
-  font-family: sans-serif;
-  padding: 0.5rem 1rem;
-
-  transition: color 0.15s, background 0.15s;
-}
-
-.nav-btn:hover {
-    color: var(--accent);
-    background: var(--surface2);
-}
-
-.nav-btn.active {
-    color: var(--accent);
-}
-
-.nav-icon { 
-    font-size: 1.3rem;
-    line-height: 1;
-    width: 20px;
-}
-
 .verse-text.active-highlight {
   outline: 2px solid white;
   outline-offset: 2px;
@@ -484,26 +382,6 @@ mark.active-highlight {
   outline-offset: 1px;
   transition: outline 0.2s;
 }
-
-/* Settings button (fixed top-right) */
-#settings-btn {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  font-size: 18px;
-}
-#settings-btn:hover { background: var(--surface2); }
 
 #toolbelt {
   position: fixed;

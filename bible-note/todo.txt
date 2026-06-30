@@ -1,0 +1,8 @@
+- centralise theme across all html files
+- notes need to spawn on mouse or to the side rather than at the top 
+    (when i highlight at the bottom i have to scroll up to get the note)
+- pop-up for when searching references
+- references?
+- search also searches layers the notes are connected
+    (for searching themes/doctrines/concepts)
+- highlighting for normal bible reading

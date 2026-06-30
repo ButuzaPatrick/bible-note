@@ -1,5 +1,4 @@
 from urllib import response
-
 from fastapi import FastAPI, Depends, HTTPException # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from sqlmodel import Session, select
@@ -8,7 +7,7 @@ from typing import Optional
 from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
-from youtube_search import YoutubeSearch
+from youtube_search import YoutubeSearch # type: ignore
 import json
 import random
 

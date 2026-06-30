@@ -1,6 +1,3 @@
-- centralise theme across all html files
-- notes need to spawn on mouse or to the side rather than at the top 
-    (when i highlight at the bottom i have to scroll up to get the note)
 - pop-up for when searching references
 - references?
 - search also searches layers the notes are connected
@@ -8,7 +5,6 @@
 - highlighting for normal bible reading
 - some search functionality for the create portal
     (want to be able to search "storm" and see where that passage is, reuse the super search from portal reader?")
-- is there error checking if i input a verse number that is too high or too low?
 - want to be able to re-order the portals (or at least order from latest to oldest)
 - want to be able to search the portals i have
 - recently read in read bible mode

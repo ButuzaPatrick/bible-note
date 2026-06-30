@@ -5,6 +5,11 @@
 /* RESET */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html {
+  transform-origin: top left;
+  transform: scale(1);
+}
+
 /* THEME COLOURS */
 :root {
     --bg: #0f0f0f;

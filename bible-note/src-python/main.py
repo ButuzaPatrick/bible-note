@@ -204,7 +204,6 @@ def get_highlights(layer_id: int, session: Session = Depends(get_session)):
 @app.post("/layers/{layer_id}/highlights")
 def create_highlight(layer_id: int, data: HighlightCreate, session: Session = Depends(get_session)):
     payload = data.model_dump()
-    print(payload)
     highlight = Highlight(layer_id=layer_id, **payload)
     session.add(highlight)
     session.commit()
@@ -226,7 +225,6 @@ def create_highlight(layer_id: int, data: HighlightCreate, session: Session = De
 @app.delete("/highlights/{highlight_id}")
 def delete_highlight(highlight_id: int, session: Session = Depends(get_session)):
     highlight = session.get(Highlight, highlight_id)
-    print("deleting highlight")
     if not highlight:
         raise HTTPException(status_code=404, detail="Highlight not found")
     note = session.exec(
@@ -283,24 +281,18 @@ def get_commentary(book: str, chapter: int, session: Session = Depends(get_sessi
     soup = BeautifulSoup(response.text, "html.parser")
     
     paragraphs = soup.find_all("p")
-    print(paragraphs)
-    # content = ""
-    # for p in paragraphs:
-    #     if "AI" in p.get_text() or "Enduring Word" in p.get_text():
-    #         continue
-    #     content += p
     
     p_text = []
     for p in paragraphs:
         if "AI" not in str(p):
             p_text.append(str(p))
 
-    content = "<br>".join(p_text)
+    content = "<br>".join(p_text) + f'SOURCE: <a href="{url}">The Enduring Word - {book} {chapter}</a>'
 
     return {
         "book": book_name,
         "chapter": chapter,
-        "content": content
+        "content": content,
     }
 
 @app.get("/sermons/{book}/{chapter}")

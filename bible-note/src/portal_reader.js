@@ -64,9 +64,7 @@ async function init() {
   bindColourSwatches();
   setupCommentaryScrollTracking();
   await loadCommentary();
-  console.log("commentary fetched");
   await loadSermons();
-  console.log("sermons fetched");
 }
 
 function openDeleteLayerModal(event, id, title) {

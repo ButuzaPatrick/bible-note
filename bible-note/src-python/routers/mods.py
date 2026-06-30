@@ -27,5 +27,13 @@ def run_mod(mod_id: str, book: str = None, chapter: int = None):
     if not func:
         raise HTTPException(status_code=400, detail="Mod has no run() function")
     
-    result = func(book=book, chapter=chapter)
+    kwargs = {}
+    if book is not None:
+        kwargs["book"] = book
+    if chapter is not None:
+        kwargs["chapter"] = chapter
+    
+    result = func(**kwargs)
+    
+    result = func(**kwargs)
     return {"result": result}

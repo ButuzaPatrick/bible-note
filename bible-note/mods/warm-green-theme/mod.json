@@ -1,0 +1,8 @@
+{
+  "id": "warm-green-theme",
+  "name": "Warm Green Theme",
+  "version": "1.0.0",
+  "type": "theme",
+  "backend": "main.py",
+  "description": "warm green theme by yours truly"
+}

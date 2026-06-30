@@ -23,6 +23,7 @@ def get_all_mods():
     return mods
 
 def run_mod_backend(mod_id, function_name="run"):
+    # need to un-hardcode the main.py, want it to read the mod.json
     backend_path = os.path.join(MODS_DIR, mod_id, "main.py")
     
     print("Loading backend from:", backend_path)

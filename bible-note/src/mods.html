@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mods</title>
+  <link rel="stylesheet" href="mods.css">
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+
+<div id="app">
+  <h1>Mods</h1>
+  <p class="subtitle">Drop a folder into <code>mods/</code> with a <code>mod.json</code> to install.</p>
+
+  <h3 class="section-heading">Panels</h3>
+  <div id="panel-mods"><p class="empty">No panel mods installed.</p></div>
+
+  <h3 class="section-heading">Importers</h3>
+  <div id="importer-mods"><p class="empty">No importer mods installed.</p></div>
+
+  <h3 class="section-heading">Themes</h3>
+  <div id="theme-mods"><p class="empty">No theme mods installed.</p></div>
+</div>
+
+<nav id="navbar">
+  <button class="nav-btn" onclick="location.href='read.html'">
+    <img src="/assets/book.png" alt="" class="nav-icon">
+    Read
+  </button>
+  <button class="nav-btn" id="nav-portals" onclick="location.href='portals.html'">
+    <img src="/assets/lines.png" alt="" class="nav-icon">
+    Portals
+  </button>
+  <button class="nav-btn" onclick="location.href='mods.html'">
+    <img src="/assets/puzzel.png" alt="" class="nav-icon">
+    Mods
+  </button>
+  <!-- Add new nav buttons here -->
+</nav>
+
+<script src="settings-save.js"></script>
+<script src="api.js"></script>
+<script src="mods.js"></script>
+</body>
+</html>

@@ -65,8 +65,15 @@ async function init() {
   setupCommentaryScrollTracking();
 
   await loadToolbeltButtons();
-  await loadCommentary();
-  await loadSermons();
+  await prefetchCommentary();
+  await prefetchSermons();
+}
+
+async function applyTheme(modId) {
+  const data = await BNApi.post(`/mods/${modId}/run`, {});
+  for (const [key, value] of Object.entries(data.result)) {
+    document.documentElement.style.setProperty(key, value);
+  }
 }
 
 function openDeleteLayerModal(event, id, title) {
@@ -579,6 +586,26 @@ function closeTool() {
   activeTool = null;
   document.querySelectorAll(".tool-btn").forEach(b => b.classList.remove("active"));
   document.getElementById("tool-panel").classList.remove("open");
+}
+
+async function prefetchCommentary() {
+  if (!portal) return;
+  const chapter = portal.chapter_start;
+  const cacheKey = `${portal.book_abbrev}-${chapter}`;
+  if (commentaryCache[cacheKey]) return;
+
+  const data = await BNApi.get(`/commentary/${portal.book}/${chapter}`);
+  commentaryCache[cacheKey] = data;
+}
+
+async function prefetchSermons() {
+  if (!portal) return;
+  const chapter = portal.chapter_start;
+  const cacheKey = `${portal.book_abbrev}-${chapter}`;
+  if (sermonsCache[cacheKey]) return;
+
+  const data = await BNApi.get(`/sermons/${portal.book_abbrev}/${chapter}`);
+  sermonsCache[cacheKey] = data.videos;
 }
 
 async function loadCommentary() {

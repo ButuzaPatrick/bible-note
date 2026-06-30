@@ -1,0 +1,8 @@
+{
+  "id": "high-contrast-theme",
+  "name": "High Contrast Theme",
+  "version": "1.0.0",
+  "type": "theme",
+  "backend": "main.py",
+  "description": "high constrast theme by yours truly"
+}

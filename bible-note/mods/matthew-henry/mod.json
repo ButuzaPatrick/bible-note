@@ -1,0 +1,9 @@
+{
+  "id": "matthew-henry",
+  "name": "Matthew Henry",
+  "version": "1.0.0",
+  "type": "panel",
+  "entry": "panel.html",
+  "backend": "main.py",
+  "description": "Matthew Henry's Commentary (public domain) via the HelloAO Free Use Bible API"
+}

@@ -63,6 +63,8 @@ async function init() {
   setupHighlighting();
   bindColourSwatches();
   setupCommentaryScrollTracking();
+
+  await loadToolbeltButtons();
   await loadCommentary();
   await loadSermons();
 }
@@ -552,7 +554,22 @@ async function toggleTool(tool) {
     await loadSermons();
   } else if (tool === "search") {
     await loadSearch();
+  } else if (tool.startsWith("mod-")) {
+    const modId = tool.replace("mod-", "");
+    await loadModPanel(modId);
   }
+}
+
+async function loadModPanel(modId) {
+  const contentEl = document.getElementById("tool-panel-content");
+  document.getElementById("tool-panel-title").textContent = "Loading...";
+
+  const book = portal?.book_abbrev || "";
+  const chapter = portal?.chapter_start || "";
+
+  console.log("Loading mod panel with book:", book, "chapter:", chapter);
+
+  contentEl.innerHTML = `<iframe src="${BNApi.baseUrl}/mods/${modId}/panel?book=${book}&chapter=${chapter}" style="width:100%;height:100%;border:none;"></iframe>`;
 }
 
 function closeTool() {
@@ -714,6 +731,26 @@ function highlightMatch(text, query) {
 // CURRENTLY DOES NOT REDIRECT PROPERLY TO PASSAGE, BETTER TO HAVE A POP-UP?
 function goToSearchResult(bookAbbrev, chapter) {
   location.href = `read.html?book=${bookAbbrev}&chapter=${chapter}`;
+}
+
+async function loadToolbeltButtons() {
+  const container = document.getElementById("toolbelt-buttons");
+
+  // Built-in tools stay as-is
+  let html = `
+    <button class="tool-btn" data-tool="commentary" onclick="toggleTool('commentary')">Commentary</button>
+    <button class="tool-btn" data-tool="sermons" onclick="toggleTool('sermons')">Sermons</button>
+    <button class="tool-btn" data-tool="search" onclick="toggleTool('search')">Search</button>
+  `;
+
+  const mods = await BNApi.get('/mods');
+  const panelMods = mods.filter(m => m.type === "panel");
+
+  html += panelMods.map(m => `
+    <button class="tool-btn" data-tool="mod-${m.id}" onclick="toggleTool('mod-${m.id}')">${m.name}</button>
+  `).join("");
+
+  container.innerHTML = html;
 }
 
 init();

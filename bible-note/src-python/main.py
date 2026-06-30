@@ -10,6 +10,7 @@ from routers.search import router as search_router
 from routers.commentary import router as commentary_router
 from routers.sermons import router as sermon_router
 from routers.read import router as read_router
+from routers.mods import router as mod_router
 
 app = FastAPI()
 
@@ -34,6 +35,7 @@ app.include_router(search_router)
 app.include_router(commentary_router)
 app.include_router(sermon_router)
 app.include_router(read_router)
+app.include_router(mod_router)
 
 
 @app.on_event("startup")

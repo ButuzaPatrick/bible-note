@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: transparent;
+      color: #e8e8e8;
+      font-family: Georgia, serif;
+      padding: 1.5rem;
+      line-height: 1.7;
+    }
+    .loading { color: #888; font-family: Inter, sans-serif; font-size: 0.9rem; }
+    .content em { color: #888; font-family: Inter, sans-serif; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div id="output" class="loading">Loading commentary...</div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const book = params.get("book");
+    const chapter = params.get("chapter");
+
+    console.log("book param:", book, "chapter param:", chapter);
+
+    fetch(`http://localhost:8000/mods/matthew-henry/run?book=${book}&chapter=${chapter}`, { method: "POST" })
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById("output").className = "content";
+        document.getElementById("output").innerHTML = data.result;
+      })
+      .catch(err => {
+        document.getElementById("output").textContent = "Error loading commentary: " + err;
+      });
+  </script>
+</body>
+</html>

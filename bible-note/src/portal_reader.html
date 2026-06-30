@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div id="layout" onmousemove="getCoords(event)">
+<div id="layout">
 
   <!-- LAYER SIDEBAR -->
   <div id="sidebar" class="dimmed">
@@ -24,12 +24,13 @@
       <h2 id="portal-title">Loading...</h2>
     </div>
     <div id="verse-list"></div>
+    
+    <!-- NOTES LAYER — floats above everything -->
+    <div id="notes-layer"></div>
   </div>
 
   <button id="settings-btn" title="Settings" onclick="location.href='settings.html'">⚙︎</button>
-
-  <!-- NOTES LAYER — floats above everything -->
-  <div id="notes-layer"></div>
+  
 
 </div>
 

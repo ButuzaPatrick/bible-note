@@ -40,6 +40,18 @@ body {
     flex-direction: column;
 }
 
+p {
+  white-space: pre-line;
+}
+
+a {
+  color: var(--accent-hover)
+}
+
+a:hover{
+  color: var(--accent)
+}
+
 mark {
   background: none;
   color: inherit;
@@ -647,7 +659,7 @@ mark.active-highlight {
 }
 
 #tool-panel.open {
-  max-height: 50vh;
+  max-height: 70vh;
 }
 
 #tool-panel-header {
@@ -674,8 +686,8 @@ mark.active-highlight {
 #tool-panel-close:hover { color: var(--accent); }
 
 #tool-panel-content {
-  padding: 1.5rem;
-  max-height: calc(50vh - 60px);
+  padding: 2rem;
+  max-height: calc(70vh - 60px);
   overflow-y: auto;
   color: var(--text);
   line-height: 1.7;

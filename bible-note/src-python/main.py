@@ -1,9 +1,14 @@
+from urllib import response
+
 from fastapi import FastAPI, Depends, HTTPException # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from sqlmodel import Session, select
 from database import get_session, Verse, Portal, Layer, Highlight, Note, create_db
 from typing import Optional
 from pydantic import BaseModel
+import requests
+from bs4 import BeautifulSoup
+from youtube_search import YoutubeSearch
 
 app = FastAPI()
 
@@ -259,15 +264,47 @@ def update_note(note_id: int, data: NoteUpdate, session: Session = Depends(get_s
 
 # TOOLBELT
 
-@app.get("/commentary/{book_abbrev}/{chapter}")
-def get_commentary(book_abbrev: str, chapter: int, session: Session = Depends(get_session)):
+@app.get("/commentary/{book}/{chapter}")
+def get_commentary(book: str, chapter: int, session: Session = Depends(get_session)):
     verse = session.exec(
-        select(Verse).where(Verse.book_abbrev == book_abbrev, Verse.chapter == chapter)
+        select(Verse).where(Verse.book_abbrev == book, Verse.chapter == chapter)
     ).first()
-    book_name = verse.book if verse else book_abbrev
+    book_name = verse.book if verse else book
+    
+    url = f"https://enduringword.com/bible-commentary/{book.lower()}-{chapter}/"
+    headers = {
+        "User-Agent": "Mozilla/5.0" 
+    }
+    
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    
+    paragraphs = soup.find_all("p")
+    print(paragraphs)
+    # content = ""
+    # for p in paragraphs:
+    #     if "AI" in p.get_text() or "Enduring Word" in p.get_text():
+    #         continue
+    #     content += p
+    
+    p_text = []
+    for p in paragraphs:
+        if "AI" not in str(p):
+            p_text.append(str(p))
+    
+    print(p_text)
+    content = "<br>".join(p_text)
 
     return {
         "book": book_name,
         "chapter": chapter,
-        "content": f"Commentary for {book_name} {chapter} is not yet available. This is placeholder text until a commentary source is connected."
+        "content": content
     }
+
+@app.get("/sermons/{book}/{chapter}")
+def get_sermons(book: str, chapter: int):
+    # results = YoutubeSearch('john macarthur romans 7', max_results=10).to_json()
+    
+    pass

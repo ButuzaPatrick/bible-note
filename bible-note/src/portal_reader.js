@@ -14,6 +14,8 @@ let activeTool = null;
 let isSelectionDrag = false;
 let mouse_x = 0;
 let mouse_y = 0;
+let commentaryCache = {};
+let commentaryScrollPositions = {};
 
 function setPortalState(nextPortal) {
   portal = nextPortal;
@@ -58,6 +60,7 @@ async function init() {
   setupSidebarBehaviour();
   setupHighlighting();
   bindColourSwatches();
+  setupCommentaryScrollTracking();
 }
 
 function openDeleteLayerModal(event, id, title) {
@@ -553,9 +556,34 @@ function closeTool() {
 async function loadCommentary() {
   if (!portal) return;
   const chapter = portal.chapter_start;
+  const cacheKey = `${portal.book_abbrev}-${chapter}`;
+
+  const contentEl = document.getElementById("tool-panel-content");
+
+  if (commentaryCache[cacheKey]) {
+    document.getElementById("tool-panel-title").textContent = `The Enduring Word - ${commentaryCache[cacheKey].book} ${chapter}`;
+    contentEl.innerHTML = `<p>${commentaryCache[cacheKey].content}</p>`;
+    contentEl.scrollTop = commentaryScrollPositions[cacheKey] || 0;
+    return;
+  }
+
+  document.getElementById("tool-panel-title").textContent = "Loading...";
+  contentEl.innerHTML = `<p>Loading...</p>`;
+
   const data = await BNApi.get(`/commentary/${portal.book}/${chapter}`);
-  document.getElementById("tool-panel-title").textContent = `Commentary — ${data.book} ${data.chapter}`;
-  document.getElementById("tool-panel-content").innerHTML = `<p>${data.content}</p>`;
+  commentaryCache[cacheKey] = data;
+
+  document.getElementById("tool-panel-title").textContent = `The Enduring Word - ${data.book} ${chapter}`;
+  contentEl.innerHTML = `<p>${data.content}</p>`;
+}
+
+function setupCommentaryScrollTracking() {
+  const contentEl = document.getElementById("tool-panel-content");
+  contentEl.addEventListener("scroll", () => {
+    if (!portal) return;
+    const cacheKey = `${portal.book_abbrev}-${portal.chapter_start}`;
+    commentaryScrollPositions[cacheKey] = contentEl.scrollTop;
+  });
 }
 
 init();

@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 from youtube_search import YoutubeSearch # type: ignore
 import json
 import random
+import threading
+from concurrent.futures import ThreadPoolExecutor
 
 app = FastAPI()
 
@@ -295,16 +297,28 @@ def get_commentary(book: str, chapter: int, session: Session = Depends(get_sessi
         "content": content,
     }
 
+# returns list of json video metadata 
+def search_youtube(url: str, max_results: int):
+    return YoutubeSearch(url, max_results=max_results).videos
+
 @app.get("/sermons/{book}/{chapter}")
 def get_sermons(book: str, chapter: int):
-    # results = YoutubeSearch('john macarthur romans 7', max_results=10).to_json()
-    
-    JM_sermons = json.loads(YoutubeSearch(f'john macarthur {book} {chapter}', max_results=4).to_json())["videos"]
-    TGC_sermons = json.loads(YoutubeSearch(f'the gospel coalition {book} {chapter}', max_results=4).to_json())["videos"]
-    LIG_sermons = json.loads(YoutubeSearch(f'ligoneer ministries {book} {chapter}', max_results=4).to_json())["videos"]
 
+    urls = [
+        f"grace to you {book} {chapter}",
+        f"the gospel coalition {book} {chapter}",
+        f"ligoneer ministries {book} {chapter}",
+    ]
     
-    sermons = JM_sermons + TGC_sermons + LIG_sermons
+    sermons = []
+    
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        futures = [executor.submit(search_youtube, url, 4) for url in urls]
+
+        # get result from each thread
+        for future in futures:
+            sermons.extend(future.result())
+    
     random.shuffle(sermons)
     
     return {

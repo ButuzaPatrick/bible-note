@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException # type: ignore
+from fastapi import APIRouter, Depends, HTTPException  # type: ignore
 from sqlmodel import Session
 from database.init import get_session
 
@@ -9,14 +9,19 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+
 class NoteUpdate(BaseModel):
     """Payload for updating note content and saved UI position."""
+
     content: Optional[str] = None
     x: Optional[float] = None
     y: Optional[float] = None
 
+
 @router.put("/notes/{note_id}")
-def update_note(note_id: int, data: NoteUpdate, session: Session = Depends(get_session)):
+def update_note(
+    note_id: int, data: NoteUpdate, session: Session = Depends(get_session)
+):
     note = session.get(Note, note_id)
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
@@ -26,7 +31,7 @@ def update_note(note_id: int, data: NoteUpdate, session: Session = Depends(get_s
         note.x = data.x
     if data.y is not None:
         note.y = data.y
-    
+
     session.add(note)
     session.commit()
     session.refresh(note)

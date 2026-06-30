@@ -1,5 +1,5 @@
-from fastapi import FastAPI # type: ignore
-from fastapi.middleware.cors import CORSMiddleware # type: ignore
+from fastapi import FastAPI  # type: ignore
+from fastapi.middleware.cors import CORSMiddleware  # type: ignore
 from database.init import create_db
 
 from routers.portals import router as portal_router
@@ -35,9 +35,11 @@ app.include_router(commentary_router)
 app.include_router(sermon_router)
 app.include_router(read_router)
 
+
 @app.on_event("startup")
 def on_startup():
     create_db()
+
 
 @app.get("/ping")
 def ping():

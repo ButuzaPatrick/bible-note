@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException # type: ignore
+from fastapi import APIRouter, Depends, HTTPException  # type: ignore
 from sqlmodel import Session, select
 from database.init import get_session
 
@@ -10,9 +10,11 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+
 # BaseModel validates the incoming data
 class PortalCreate(BaseModel):
     """Payload for creating a reading portal."""
+
     title: str
     book: str
     book_abbrev: str
@@ -21,9 +23,11 @@ class PortalCreate(BaseModel):
     chapter_end: Optional[int] = None
     verse_end: Optional[int] = None
 
+
 @router.get("/portals")
 def get_portals(session: Session = Depends(get_session)):
     return session.exec(select(Portal)).all()
+
 
 @router.get("/portals/{portal_id}")
 def get_portal(portal_id: int, session: Session = Depends(get_session)):
@@ -31,6 +35,7 @@ def get_portal(portal_id: int, session: Session = Depends(get_session)):
     if not portal:
         raise HTTPException(status_code=404, detail="Portal not found")
     return portal
+
 
 @router.post("/portals")
 def create_portal(data: PortalCreate, session: Session = Depends(get_session)):
@@ -41,6 +46,7 @@ def create_portal(data: PortalCreate, session: Session = Depends(get_session)):
     session.refresh(portal)
     return portal
 
+
 @router.delete("/portals/{portal_id}")
 def delete_portal(portal_id: int, session: Session = Depends(get_session)):
     portal = session.get(Portal, portal_id)
@@ -50,8 +56,11 @@ def delete_portal(portal_id: int, session: Session = Depends(get_session)):
     session.commit()
     return {"ok": True}
 
+
 @router.get("/portals/{portal_id}/verses")
-def get_portal_verses(portal_id: int, translation: str = "ESV", session: Session = Depends(get_session)):
+def get_portal_verses(
+    portal_id: int, translation: str = "ESV", session: Session = Depends(get_session)
+):
     portal = session.get(Portal, portal_id)
     if not portal:
         raise HTTPException(status_code=404, detail="Portal not found")
@@ -61,12 +70,14 @@ def get_portal_verses(portal_id: int, translation: str = "ESV", session: Session
     verse_end = portal.verse_end
 
     verses = session.exec(
-        select(Verse).where(
+        select(Verse)
+        .where(
             Verse.book_abbrev == portal.book_abbrev,
             Verse.translation == translation,
             Verse.chapter >= portal.chapter_start,
-            Verse.chapter <= chapter_end
-        ).order_by(Verse.chapter, Verse.verse_number)
+            Verse.chapter <= chapter_end,
+        )
+        .order_by(Verse.chapter, Verse.verse_number)
     ).all()
 
     def in_range(v):

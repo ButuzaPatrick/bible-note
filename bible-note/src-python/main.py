@@ -1,16 +1,20 @@
-from urllib import response
 from fastapi import FastAPI, Depends, HTTPException # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from sqlmodel import Session, select
-from database import get_session, Verse, Portal, Layer, Highlight, Note, create_db
+from database import get_session, create_db
+
+from models.verse import Verse
+from models.highlight import Highlight
+from models.layer import Layer
+from models.portal import Portal
+from models.note import Note
+
 from typing import Optional
 from pydantic import BaseModel
 import requests
 from bs4 import BeautifulSoup
 from youtube_search import YoutubeSearch # type: ignore
-import json
 import random
-import threading
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 

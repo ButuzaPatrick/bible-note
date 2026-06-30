@@ -356,11 +356,45 @@ function applyHighlightToVerse(highlight) {
     return;
   }
 
-  const raw = verseTextCache[highlight.verse_id] || textEl.textContent;
-  const before = raw.slice(0, highlight.start_offset || 0);
-  const marked = raw.slice(highlight.start_offset || 0, highlight.end_offset || 0);
-  const after = raw.slice(highlight.end_offset || 0);
-  textEl.innerHTML = `${before}<mark style="background:${colour}44;border-radius:3px;padding:0 2px;color:inherit;">${marked}</mark>${after}`;
+  // Always rebuild from the clean cached text with ALL partial highlights for this verse
+  rebuildPartialHighlights(highlight.verse_id);
+}
+
+function rebuildPartialHighlights(verseId) {
+  const colour = activeLayer?.colour || "#7c6aff";
+  const verseEl = document.querySelector(`.verse[data-verse-id="${verseId}"]`);
+  if (!verseEl) return;
+  const textEl = verseEl.querySelector(".verse-text");
+  if (!textEl) return;
+
+  const raw = verseTextCache[verseId];
+  if (!raw) return;
+
+  // Get all partial highlights for this verse, sorted by start offset
+  const partials = highlights
+    .filter(h => h.verse_id === verseId && !h.full_verse && h.start_offset != null)
+    .sort((a, b) => a.start_offset - b.start_offset);
+
+  if (partials.length === 0) {
+    textEl.innerHTML = raw;
+    return;
+  }
+
+  // Build the HTML by walking through the raw text and inserting marks
+  let result = "";
+  let cursor = 0;
+
+  for (const h of partials) {
+    const start = h.start_offset;
+    const end = h.end_offset;
+    if (start < cursor) continue; // skip overlapping highlights
+    result += raw.slice(cursor, start);
+    result += `<mark style="background:${colour}44;border-radius:3px;padding:0 2px;color:inherit;">${raw.slice(start, end)}</mark>`;
+    cursor = end;
+  }
+
+  result += raw.slice(cursor);
+  textEl.innerHTML = result;
 }
 
 function appendNote(highlight) {
@@ -403,7 +437,17 @@ function appendNote(highlight) {
 function renderHighlights() {
   if (!activeLayer) return;
   clearHighlightsUI();
-  highlights.forEach(applyHighlightToVerse);
+  
+  // Apply full verse highlights first
+  highlights.forEach(h => {
+    if (h.full_verse) applyHighlightToVerse(h);
+  });
+
+  // Then rebuild all partial highlights per verse in one pass
+  const partialVerseIds = [...new Set(
+    highlights.filter(h => !h.full_verse).map(h => h.verse_id)
+  )];
+  partialVerseIds.forEach(rebuildPartialHighlights);
 }
 
 function clearNotesUI() {

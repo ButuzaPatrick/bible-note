@@ -427,10 +427,12 @@ function appendNote(highlight) {
     </div>
     <textarea class="note-textarea" placeholder="Add a note..."
       onblur="saveNote(${note.id}, this.value)">${note.content}</textarea>
+    <div class="note-resize-handle"></div>
   `;
 
   box.addEventListener("mousedown", () => pulseHighlight(highlight));
   makeDraggable(box, note.id);
+  makeResizable(box, note.id);
   container.appendChild(box);
 }
 
@@ -467,6 +469,8 @@ function renderNotes() {
     box.id = `note-${note.id}`;
     box.style.left = note.x + "px";
     box.style.top = note.y + "px";
+    box.style.width = (note.width || 300) + "px";
+    box.style.height = (note.height || 120) + "px";
     box.style.borderTop = `3px solid ${colour}`;
 
     box.innerHTML = `
@@ -476,10 +480,12 @@ function renderNotes() {
       </div>
       <textarea class="note-textarea" placeholder="Add a note..."
         onblur="saveNote(${note.id}, this.value)">${note.content}</textarea>
+      <div class="note-resize-handle"></div>
     `;
 
     box.addEventListener("mousedown", () => pulseHighlight(highlight));
     makeDraggable(box, note.id);
+    makeResizable(box, note.id);
     container.appendChild(box);
   });
 }
@@ -588,6 +594,40 @@ function makeDraggable(el, noteId) {
       if (updatedNote) {
         updateNoteInState(noteId, updatedNote);
       }
+    };
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  });
+}
+
+function makeResizable(el, noteId) {
+  const handle = el.querySelector(".note-resize-handle");
+  if (!handle) return;
+
+  handle.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = el.offsetWidth;
+    const startHeight = el.offsetHeight;
+
+    const onMove = (e) => {
+      const newWidth = Math.min(Math.max(startWidth + (e.clientX - startX), 180), 500);
+      const newHeight = Math.min(Math.max(startHeight + (e.clientY - startY), 100), 500);
+      el.style.width = newWidth + "px";
+      el.style.height = newHeight + "px";
+    };
+
+    const onUp = async () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+      await BNApi.put(`/notes/${noteId}`, {
+        width: el.offsetWidth,
+        height: el.offsetHeight
+      });
     };
 
     document.addEventListener("mousemove", onMove);

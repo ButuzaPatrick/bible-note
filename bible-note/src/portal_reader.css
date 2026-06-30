@@ -293,6 +293,29 @@ h2 {
   width: 100%;
 }
 
+.note-resize-handle {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  opacity: 0.4;
+}
+
+.note-resize-handle::before {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+}
+
+.note-resize-handle:hover { opacity: 1; }
+
 .modal-overlay {
   display: none;
   position: fixed;

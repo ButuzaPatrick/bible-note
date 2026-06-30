@@ -16,6 +16,8 @@ class NoteUpdate(BaseModel):
     content: Optional[str] = None
     x: Optional[float] = None
     y: Optional[float] = None
+    width: Optional[float] = None
+    height: Optional[float] = None
 
 
 @router.put("/notes/{note_id}")
@@ -31,6 +33,10 @@ def update_note(
         note.x = data.x
     if data.y is not None:
         note.y = data.y
+    if data.width is not None:
+        note.width = data.width
+    if data.height is not None:
+        note.height = data.height
 
     session.add(note)
     session.commit()

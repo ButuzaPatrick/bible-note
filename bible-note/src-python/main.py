@@ -256,3 +256,18 @@ def update_note(note_id: int, data: NoteUpdate, session: Session = Depends(get_s
     session.commit()
     session.refresh(note)
     return note
+
+# TOOLBELT
+
+@app.get("/commentary/{book_abbrev}/{chapter}")
+def get_commentary(book_abbrev: str, chapter: int, session: Session = Depends(get_session)):
+    verse = session.exec(
+        select(Verse).where(Verse.book_abbrev == book_abbrev, Verse.chapter == chapter)
+    ).first()
+    book_name = verse.book if verse else book_abbrev
+
+    return {
+        "book": book_name,
+        "chapter": chapter,
+        "content": f"Commentary for {book_name} {chapter} is not yet available. This is placeholder text until a commentary source is connected."
+    }

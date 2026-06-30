@@ -24,7 +24,7 @@
       <h2 id="portal-title">Loading...</h2>
     </div>
     <div id="verse-list"></div>
-    
+
     <!-- NOTES LAYER — floats above everything -->
     <div id="notes-layer"></div>
   </div>
@@ -32,6 +32,20 @@
   <button id="settings-btn" title="Settings" onclick="location.href='settings.html'">⚙︎</button>
   
 
+</div>
+
+<!-- TOOLBELT -->
+<div id="toolbelt">
+  <div id="toolbelt-buttons">
+    <button class="tool-btn" data-tool="commentary" onclick="toggleTool('commentary')">Commentary</button>
+  </div>
+  <div id="tool-panel">
+    <div id="tool-panel-header">
+      <span id="tool-panel-title"></span>
+      <button id="tool-panel-close" onclick="closeTool()">✕</button>
+    </div>
+    <div id="tool-panel-content"></div>
+  </div>
 </div>
 
 <!-- ADD LAYER MODAL -->

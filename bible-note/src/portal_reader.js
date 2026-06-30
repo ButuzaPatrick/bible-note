@@ -10,6 +10,7 @@ let justSelectedText = false;
 let verseTextCache = {};
 let layerToDelete = null;
 let selectionStart = null;
+let activeTool = null;
 let isSelectionDrag = false;
 let mouse_x = 0;
 let mouse_y = 0;
@@ -520,6 +521,41 @@ function setupSidebarBehaviour() {
       sidebar.classList.add("dimmed");
     }, 1500);
   });
+}
+
+// TOOLBELT
+
+async function toggleTool(tool) {
+  if (activeTool === tool) {
+    closeTool();
+    return;
+  }
+
+  activeTool = tool;
+  document.querySelectorAll(".tool-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(`.tool-btn[data-tool="${tool}"]`).classList.add("active");
+
+  document.getElementById("tool-panel-title").textContent = "Loading...";
+  document.getElementById("tool-panel-content").innerHTML = `<p>Loading...</p>`;
+  document.getElementById("tool-panel").classList.add("open");
+
+  if (tool === "commentary") {
+    await loadCommentary();
+  }
+}
+
+function closeTool() {
+  activeTool = null;
+  document.querySelectorAll(".tool-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tool-panel").classList.remove("open");
+}
+
+async function loadCommentary() {
+  if (!portal) return;
+  const chapter = portal.chapter_start;
+  const data = await BNApi.get(`/commentary/${portal.book}/${chapter}`);
+  document.getElementById("tool-panel-title").textContent = `Commentary — ${data.book} ${data.chapter}`;
+  document.getElementById("tool-panel-content").innerHTML = `<p>${data.content}</p>`;
 }
 
 init();

@@ -2,10 +2,10 @@
 /* CENTRALIZED THEME & BASE STYLES */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── RESET ── */
+/* RESET */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── THEME COLORS ── */
+/* THEME COLOURS */
 :root {
     --bg: #0f0f0f;
     --surface: #1a1a1a;
@@ -19,7 +19,7 @@
     --sidebar-width: 220px;
 }
 
-/* ── SCROLLBAR ── */
+/* SCROLLBAR */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -65,7 +65,7 @@ mark {
     color: inherit;
 }
 
-/* ── COMMON BUTTONS ── */
+/* BUTTONS */
 .back-btn {
     background: none;
     border: 1px solid var(--border);
@@ -125,7 +125,7 @@ mark {
     opacity: 0.85;
 }
 
-/* ── FORM ELEMENTS ── */
+/* FORM ELEMENTS */
 .field {
     margin-bottom: 1rem;
 }
@@ -162,7 +162,7 @@ mark {
     background: var(--surface2);
 }
 
-/* ── NAVIGATION BAR ── */
+/* NAVIGATION BAR */
 #navbar {
     position: fixed;
     bottom: 0;
@@ -208,7 +208,7 @@ mark {
     width: 20px;
 }
 
-/* ── SETTINGS BUTTON ── */
+/* SETTINGS BUTTON */
 #settings-btn {
     position: fixed;
     top: 12px;
@@ -231,7 +231,7 @@ mark {
     background: var(--surface2);
 }
 
-/* ── UTILITY CLASSES ── */
+/* UTILITY CLASSES */
 .loading {
     color: var(--text-muted);
     font-family: sans-serif;

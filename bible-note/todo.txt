@@ -6,3 +6,11 @@
 - search also searches layers the notes are connected
     (for searching themes/doctrines/concepts)
 - highlighting for normal bible reading
+- some search functionality for the create portal
+    (want to be able to search "storm" and see where that passage is, reuse the super search from portal reader?")
+- is there error checking if i input a verse number that is too high or too low?
+- want to be able to re-order the portals (or at least order from latest to oldest)
+- want to be able to search the portals i have
+- recently read in read bible mode
+- highlight multiple phrases per verse
+- text editor for making longer sermon notes (if notes are no sufficient?)

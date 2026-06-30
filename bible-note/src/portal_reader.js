@@ -562,7 +562,10 @@ async function toggleTool(tool) {
 
 async function loadModPanel(modId) {
   const contentEl = document.getElementById("tool-panel-content");
-  document.getElementById("tool-panel-title").textContent = "Loading...";
+  
+  const mods = await BNApi.get('/mods');
+  const mod = mods.find(m => m.id === modId);
+  document.getElementById("tool-panel-title").textContent = mod?.description || modId;
 
   const book = portal?.book_abbrev || "";
   const chapter = portal?.chapter_start || "";

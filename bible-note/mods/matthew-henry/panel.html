@@ -3,12 +3,33 @@
 <head>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+    }
     body {
       background: transparent;
       color: #e8e8e8;
       font-family: Georgia, serif;
       padding: 1.5rem;
       line-height: 1.7;
+      overflow-y: auto;
+    }
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
     }
     .loading { color: #888; font-family: Inter, sans-serif; font-size: 0.9rem; }
     .content em { color: #888; font-family: Inter, sans-serif; font-size: 0.8rem; }

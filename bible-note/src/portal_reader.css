@@ -467,7 +467,7 @@ mark.active-highlight {
 
 #tool-panel-content {
   padding: 2rem;
-  max-height: calc(70vh - 60px);
+  height: calc(70vh - 60px);
   overflow-y: auto;
   color: var(--text);
   line-height: 1.7;

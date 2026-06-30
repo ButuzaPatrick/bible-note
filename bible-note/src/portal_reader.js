@@ -514,7 +514,35 @@ function pulseHighlight(highlight) {
       setTimeout(() => textEl.classList.remove("active-highlight"), 1500);
     }
   } else {
-    const mark = verseEl.querySelector("mark");
+    // Find which index this highlight is among all partials for this verse
+    // sorted the same way as rebuildPartialHighlights
+    const partials = highlights
+      .filter(h => h.verse_id === highlight.verse_id && !h.full_verse && h.start_offset != null)
+      .sort((a, b) => a.start_offset - b.start_offset);
+
+    // After merging, find which merged group this highlight falls into
+    const merged = [];
+    let current = { start: partials[0].start_offset, end: partials[0].end_offset, index: 0 };
+
+    for (let i = 1; i < partials.length; i++) {
+      const h = partials[i];
+      if (h.start_offset <= current.end) {
+        current.end = Math.max(current.end, h.end_offset);
+      } else {
+        merged.push(current);
+        current = { start: h.start_offset, end: h.end_offset, index: merged.length };
+      }
+    }
+    merged.push(current);
+
+    // Find which merged group contains this highlight's start offset
+    const groupIndex = merged.findIndex(g =>
+      highlight.start_offset >= g.start && highlight.start_offset < g.end
+    );
+
+    const marks = verseEl.querySelectorAll("mark");
+    const mark = marks[groupIndex >= 0 ? groupIndex : 0];
+
     if (mark) {
       mark.classList.add("active-highlight");
       setTimeout(() => mark.classList.remove("active-highlight"), 1500);

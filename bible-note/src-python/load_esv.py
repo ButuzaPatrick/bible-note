@@ -1,7 +1,5 @@
 import json
-import re
 import sys
-import os
 from sqlmodel import Session
 from database import engine, Verse, create_db
 

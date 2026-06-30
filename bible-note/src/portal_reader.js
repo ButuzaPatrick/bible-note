@@ -243,8 +243,9 @@ function setupHighlighting() {
     const verse = e.target.closest(".verse");
     if (!verse || !activeLayer) return;
 
+    // note position! this is what we pass to the backend to process
     mouse_x = e.clientX;
-    mouse_y = e.clientY;
+    mouse_y = e.clientY + document.getElementById("app").scrollTop;
 
     const sel = window.getSelection();
     if (sel && sel.toString().trim().length > 0) return;
@@ -254,8 +255,8 @@ function setupHighlighting() {
     // Check if the verse is already highlighted in full; if so, do not add another highlight
     // This prevents duplicate full-verse highlights, but could be removed if you want to allow multiple highlights on the same verse
     // but that's what the layers are for!
-    const existing = highlights.find(h => h.verse_id === verseId && h.full_verse);
-    if (existing) return;
+    // const existing = highlights.find(h => h.verse_id === verseId && h.full_verse);
+    // if (existing) return;
 
     const result = await BNApi.post(`/layers/${activeLayer.id}/highlights`, {
       verse_id: verseId,
@@ -271,7 +272,7 @@ function setupHighlighting() {
     if (!activeLayer) return;
 
     mouse_x = event.clientX;
-    mouse_y = event.clientY;
+    mouse_y = event.clientY + document.getElementById("app").scrollTop;
 
     const sel = window.getSelection();
     if (!sel || sel.toString().trim().length === 0) {

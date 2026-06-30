@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends # type: ignore
 from sqlmodel import Session, select
-from database import get_session
+from database.init import get_session
 
 from models.note import Note
 from models.highlight import Highlight

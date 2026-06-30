@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException # type: ignore
 from sqlmodel import Session, select
-from database import get_session
+from database.init import get_session
 
 from models.verse import Verse
 from models.portal import Portal

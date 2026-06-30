@@ -1,6 +1,6 @@
 from fastapi import FastAPI # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
-from database import create_db
+from database.init import create_db
 
 from routers.portals import router as portal_router
 from routers.layers import router as layer_router
@@ -22,8 +22,8 @@ app.add_middleware(
         "http://localhost:8000",
         "tauri://localhost",
     ],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "PUT", "POST", "DELETE"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 app.include_router(portal_router)

@@ -149,10 +149,56 @@ function renderLayers() {
     <div class="layer-pill ${activeLayer?.id === layer.id ? 'active' : ''}"
          onclick="setActiveLayer(${JSON.stringify(layer).replace(/"/g, '&quot;')})">
       <div class="layer-dot" style="background:${layer.colour}"></div>
-      <span class="layer-pill-label">${layer.title || 'Untitled'}</span>
+      <span class="layer-pill-label" 
+            oncontextmenu="startEditingLayer(event, ${layer.id}, '${(layer.title || '').replace(/'/g, "\\'")}')">
+        ${layer.title || 'Untitled'}
+      </span>
       <button class="layer-delete" onclick="openDeleteLayerModal(event, ${layer.id}, '${layer.title || ''}')">✕</button>
     </div>
   `).join("");
+}
+
+function startEditingLayer(event, layerId, currentTitle) {
+  event.preventDefault();
+  event.stopPropagation();
+  const label = event.target;
+  const original = currentTitle;
+
+  label.innerHTML = `<input 
+    class="layer-title-edit" 
+    value="${currentTitle}" 
+    onclick="event.stopPropagation()"
+    onkeydown="handleLayerEditKey(event, ${layerId})"
+    onblur="finishEditingLayer(event, ${layerId}, '${original}')"
+  />`;
+
+  const input = label.querySelector("input");
+  input.focus();
+  input.select();
+}
+
+function handleLayerEditKey(event, layerId) {
+  if (event.key === "Enter") {
+    event.target.blur();
+  } else if (event.key === "Escape") {
+    loadLayers(); // just reload to reset
+  }
+}
+
+async function finishEditingLayer(event, layerId, original) {
+  const newTitle = event.target.value.trim() || null;
+  if (newTitle === original) {
+    await loadLayers();
+    return;
+  }
+
+  await BNApi.put(`/layers/${layerId}`, { title: newTitle });
+  await loadLayers();
+
+  // If this is the active layer, update it in state too
+  if (activeLayer?.id === layerId) {
+    activeLayer = { ...activeLayer, title: newTitle };
+  }
 }
 
 async function setActiveLayer(layer) {

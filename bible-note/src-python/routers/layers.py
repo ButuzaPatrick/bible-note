@@ -19,6 +19,9 @@ class LayerCreate(BaseModel):
     colour: Optional[str] = "#ffdc6a"
     order: Optional[int] = 0
 
+class LayerUpdate(BaseModel):
+    title: Optional[str] = None
+    colour: Optional[str] = None
 
 @router.get("/portals/{portal_id}/layers")
 def get_layers(portal_id: int, session: Session = Depends(get_session)):
@@ -37,6 +40,22 @@ def create_layer(
     session.refresh(layer)
     return layer
 
+@router.put("/layers/{layer_id}")
+def update_layer(
+    layer_id: int, data: LayerUpdate, session: Session = Depends(get_session)
+):
+    layer = session.get(Layer, layer_id)
+    if not layer:
+        raise HTTPException(status_code=404, detail="Layer not found")
+    if data.title is not None:
+        layer.title = data.title
+    if data.colour is not None:
+        layer.colour = data.colour
+    
+    session.add(layer)
+    session.commit()
+    session.refresh(layer)
+    return layer
 
 @router.delete("/layers/{layer_id}")
 def delete_layer(layer_id: int, session: Session = Depends(get_session)):

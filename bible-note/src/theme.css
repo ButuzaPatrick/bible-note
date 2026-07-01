@@ -22,6 +22,8 @@ html {
     --accent-hover: #bead72;
     --nav-height: 64px;
     --sidebar-width: 220px;
+    --main-font: Inter, Avenir, Helvetica, Arial, sans-serif;
+    --border-thickness: 1px;
 }
 
 /* SCROLLBAR */
@@ -46,7 +48,7 @@ html {
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-family: var(--main-font);
     height: 100vh;
     overflow: hidden;
     display: flex;
@@ -74,7 +76,7 @@ mark {
 /* BUTTONS */
 .back-btn {
     background: none;
-    border: 1px solid var(--border);
+    border: var(--border-thickness) solid var(--border);
     color: var(--text-muted);
     padding: 0.4rem 0.85rem;
     cursor: pointer;
@@ -105,7 +107,7 @@ mark {
 
 .btn-cancel {
     background: none;
-    border: 1px solid var(--border);
+    border: var(--border-thickness) solid var(--border);
     color: var(--text-muted);
     padding: 0.6rem 1.2rem;
     cursor: pointer;
@@ -151,10 +153,10 @@ mark {
     width: 100%;
     padding: 0.65rem 0.9rem;
     background: var(--surface2);
-    border: 1px solid var(--border);
+    border: var(--border-thickness) solid var(--border);
     color: var(--text);
     font-size: 0.95rem;
-    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-family: var(--main-font);
     outline: none;
     transition: border-color 0.15s;
 }
@@ -176,7 +178,7 @@ mark {
     right: 0;
     height: var(--nav-height);
     background: var(--surface);
-    border-top: 1px solid var(--border);
+    border-top: var(--border-thickness) solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -224,7 +226,7 @@ mark {
     border-radius: 8px;
     background: var(--surface);
     color: var(--text);
-    border: 1px solid var(--border);
+    border: var(--border-thickness) solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;

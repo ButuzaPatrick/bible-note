@@ -4,6 +4,7 @@ from database.init import get_session
 
 from models.note import Note
 from models.highlight import Highlight
+from models.layer import Layer
 
 from models.verse import Verse
 
@@ -28,9 +29,34 @@ def search(
         .join(Highlight, Note.highlight_id == Highlight.id)
         .join(Verse, Highlight.verse_id == Verse.id)
     ).all()
+    
+    print(matching_notes_raw)
+    
+    # Get notes from layers with matching names (regardless of note content)
+    layer_notes = session.exec(
+        select(Note, Highlight, Verse, Layer)
+        .join(Highlight, Note.highlight_id == Highlight.id)
+        .join(Verse, Highlight.verse_id == Verse.id)
+        .join(Layer, Highlight.layer_id == Layer.id)
+        .where(Layer.title.ilike(search_term))
+    ).all()
+
+    # Get notes with matching content (regardless of layer name)
+    content_notes = session.exec(
+        select(Note, Highlight, Verse, Layer)
+        .where(Note.content.ilike(search_term))
+        .join(Highlight, Note.highlight_id == Highlight.id)
+        .join(Verse, Highlight.verse_id == Verse.id)
+        .join(Layer, Highlight.layer_id == Layer.id)
+    ).all()
+
+    # Combine both results
+    matching_notes_raw = layer_notes + content_notes
+    
+    print(matching_notes_raw)
 
     matching_notes = []
-    for note, highlight, verse in matching_notes_raw:
+    for note, highlight, verse, layer in matching_notes_raw:
         matching_notes.append(
             {
                 "note_id": note.id,
@@ -45,6 +71,7 @@ def search(
                     "verse_number": verse.verse_number,
                     "text": verse.text,
                 },
+                "layer_title": layer.title,
             }
         )
 

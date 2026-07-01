@@ -10,9 +10,14 @@
 <body>
 
   <div id="app">
-
+    
     <!-- SCREEN 1: Book List -->
     <div id="screen-books" class="screen active">
+      <!-- Recently Read History -->
+      <div id="recent-history">
+        <h3>Recently Read:</h3>
+        <div id="history-list"></div>
+      </div>
       <input id="search-bar" type="text" placeholder="Search books..." autofocus />
       <div id="book-grid"><p class="loading">Loading books...</p></div>
     </div>
@@ -33,8 +38,9 @@
         <h2 id="reader-title"></h2>
       </div>
       <div id="verse-list"></div>
+      
     </div>
-
+    
   </div>
 
   <!-- FLOATING NAV BAR -->

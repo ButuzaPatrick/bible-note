@@ -1,6 +1,7 @@
 let currentBook = null;
 let currentChapter = null;
 let currentTranslation = "ESV";
+const MAX_HISTORY = 7;
 
 function setTranslation(t) {
   currentTranslation = t;
@@ -24,6 +25,7 @@ function navTo(tab) {
 // BOOKS
 async function showBooks() {
   showScreen("screen-books");
+  renderHistory();
   const grid = document.getElementById("book-grid");
   grid.innerHTML = `<p class="loading">Loading...</p>`;
 
@@ -64,6 +66,7 @@ async function showChapters(abbrev, name) {
 // READER
 async function showReader(chapter) {
   currentChapter = chapter;
+  saveToHistory(currentBook, chapter);
   showScreen("screen-reader");
   document.getElementById("reader-title").textContent = `${currentBook.name} ${chapter}`;
 
@@ -74,6 +77,45 @@ async function showReader(chapter) {
       <span class="verse-text">${v.text} </span>
     </span>
   `).join("");
+}
+
+
+
+function saveToHistory(book, chapter) {
+  const history = getHistory();
+  const entry = { abbrev: book.abbrev, name: book.name, chapter };
+  const filtered = history.filter(h => !(h.abbrev === entry.abbrev && h.chapter === entry.chapter));
+  const updated = [entry, ...filtered].slice(0, MAX_HISTORY);
+  localStorage.setItem("readHistory", JSON.stringify(updated));
+}
+
+function getHistory() {
+  try {
+    return JSON.parse(localStorage.getItem("readHistory") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function renderHistory() {
+  const history = getHistory();
+  const list = document.getElementById("history-list");
+
+  if (history.length === 0) {
+    list.innerHTML = `<p class="history-empty">Nothing yet — start reading!</p>`;
+    return;
+  }
+
+  list.innerHTML = history.map(h => `
+    <div class="history-item" onclick="quickOpen('${h.abbrev}', '${h.name}', ${h.chapter})">
+      <span class="history-ref">${h.name} ${h.chapter}</span>
+    </div>
+  `).join("");
+}
+
+function quickOpen(abbrev, name, chapter) {
+  currentBook = { abbrev, name };
+  showReader(chapter);
 }
 
 showBooks();

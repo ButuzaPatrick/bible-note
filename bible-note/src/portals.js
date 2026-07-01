@@ -21,8 +21,8 @@ function renderPortals(portals) {
     return;
   }
 
-  list.innerHTML = portals.map(p => `
-    <div class="portal-card-shell">
+  list.innerHTML = portals.map((p, index) => `
+    <div class="portal-card-shell" style="animation-delay: ${index * 60}ms">
       <div class="portal-card" onclick="openPortal(${p.id})">
         <div class="portal-card-info">
           <h3>${p.title}</h3>

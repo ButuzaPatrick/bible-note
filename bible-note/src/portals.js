@@ -1,5 +1,6 @@
 let books = [];
 let portalToDelete = null
+let allPortals = [];
 
 async function init() {
   books = await BNApi.get('/books');
@@ -12,12 +13,11 @@ async function init() {
   loadPortals();
 }
 
-async function loadPortals() {
-  const portals = await BNApi.get('/portals');
+function renderPortals(portals) {
   const list = document.getElementById("portal-list");
 
   if (portals.length === 0) {
-    list.innerHTML = `<p class="empty">No portals yet.</p>`;
+    list.innerHTML = `<p class="empty">No portals found.</p>`;
     return;
   }
 
@@ -30,10 +30,25 @@ async function loadPortals() {
         </div>
       </div>
       <div class="portal-card-actions">
-          <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openDeleteModal(event, this)">Delete</button>
+        <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openDeleteModal(event, this)">Delete</button>
       </div>
     </div>
   `).join("");
+}
+
+async function loadPortals() {
+  allPortals = await BNApi.get('/portals');
+  renderPortals(allPortals);
+  const list = document.getElementById("portal-list");
+
+  document.getElementById("portal-search").oninput = (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtered = allPortals.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.book.toLowerCase().includes(q)
+    );
+    renderPortals(filtered);
+  };
 }
 
 function formatPassage(p) {

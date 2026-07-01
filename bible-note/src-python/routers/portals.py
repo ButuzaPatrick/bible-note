@@ -26,8 +26,7 @@ class PortalCreate(BaseModel):
 
 @router.get("/portals")
 def get_portals(session: Session = Depends(get_session)):
-    return session.exec(select(Portal)).all()
-
+    return list(reversed(session.exec(select(Portal)).all()))
 
 @router.get("/portals/{portal_id}")
 def get_portal(portal_id: int, session: Session = Depends(get_session)):
@@ -35,7 +34,6 @@ def get_portal(portal_id: int, session: Session = Depends(get_session)):
     if not portal:
         raise HTTPException(status_code=404, detail="Portal not found")
     return portal
-
 
 @router.post("/portals")
 def create_portal(data: PortalCreate, session: Session = Depends(get_session)):

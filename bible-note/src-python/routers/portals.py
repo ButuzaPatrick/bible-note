@@ -23,6 +23,8 @@ class PortalCreate(BaseModel):
     chapter_end: Optional[int] = None
     verse_end: Optional[int] = None
 
+class PortalUpdate(BaseModel):
+    title: Optional[str] = None
 
 @router.get("/portals")
 def get_portals(session: Session = Depends(get_session)):
@@ -44,6 +46,18 @@ def create_portal(data: PortalCreate, session: Session = Depends(get_session)):
     session.refresh(portal)
     return portal
 
+@router.put("/portals/{portal_id}")
+def update_portal(portal_id: int, data: PortalUpdate, session: Session = Depends(get_session)):
+    portal = session.get(Portal, portal_id)
+    if not portal:
+        raise HTTPException(status_code=404, detail="Portal not found")
+    if data.title is not None:
+        portal.title = data.title
+    
+    session.add(portal)
+    session.commit()
+    session.refresh(portal)
+    return portal
 
 @router.delete("/portals/{portal_id}")
 def delete_portal(portal_id: int, session: Session = Depends(get_session)):

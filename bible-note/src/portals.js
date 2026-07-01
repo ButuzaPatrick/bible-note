@@ -1,6 +1,7 @@
 let books = [];
 let portalToDelete = null
 let allPortals = [];
+let portalToRename = null;
 
 async function init() {
   books = await BNApi.get('/books');
@@ -12,6 +13,34 @@ async function init() {
 
   loadPortals();
 }
+
+function openRenameModal(event, id, currentTitle) {
+  event.stopPropagation();
+  portalToRename = id;
+  document.getElementById("rename-input").value = currentTitle;
+  document.getElementById("rename-modal-overlay").classList.add("open");
+  setTimeout(() => document.getElementById("rename-input").focus(), 50);
+}
+
+function closeRenameModal() {
+  portalToRename = null;
+  document.getElementById("rename-modal-overlay").classList.remove("open");
+}
+
+async function confirmRename() {
+  if (!portalToRename) return;
+  const newTitle = document.getElementById("rename-input").value.trim();
+  if (!newTitle) return;
+
+  await BNApi.put(`/portals/${portalToRename}`, { title: newTitle });
+  closeRenameModal();
+  loadPortals();
+}
+
+document.getElementById("rename-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") confirmRename();
+  if (e.key === "Escape") closeRenameModal();
+});
 
 function renderPortals(portals) {
   const list = document.getElementById("portal-list");
@@ -25,12 +54,13 @@ function renderPortals(portals) {
     <div class="portal-card-shell" style="animation-delay: ${index * 60}ms">
       <div class="portal-card" onclick="openPortal(${p.id})">
         <div class="portal-card-info">
-          <h3>${p.title}</h3>
+          <h3 id="portal-title-${p.id}">${p.title}</h3>
           <p>${formatPassage(p)}</p>
         </div>
       </div>
       <div class="portal-card-actions">
-        <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openDeleteModal(event, this)">Delete</button>
+        <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openRenameModal(event, ${p.id}, '${p.title.replace(/'/g, "\\'")}')">✎</button>
+        <button class="delete-btn" data-id="${p.id}" data-title="${p.title}" onclick="openDeleteModal(event, this)">✕</button>
       </div>
     </div>
   `).join("");

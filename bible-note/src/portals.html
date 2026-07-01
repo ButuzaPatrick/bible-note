@@ -73,6 +73,20 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="rename-modal-overlay">
+  <div class="modal">
+    <h2>Rename Portal</h2>
+    <div class="field">
+      <label>New Name</label>
+      <input type="text" id="rename-input" placeholder="Enter new name..." />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeRenameModal()">Cancel</button>
+      <button class="btn-save" onclick="confirmRename()">Rename</button>
+    </div>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav id="navbar">
   <button class="nav-btn" onclick="location.href='read.html'">

@@ -1,17 +1,21 @@
-let books = [];
-let portalToDelete = null
+let allBooks = [];
+let portalToDelete = null;
 let allPortals = [];
 let portalToRename = null;
 
 async function init() {
-  books = await BNApi.get('/books');
-  setupBookSearch();
-  loadPortals();
+  try {
+    allBooks = await BNApi.get('/books');
+    setupBookSearch();
+    loadPortals();
 
-  document.getElementById("rename-input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") confirmRename();
-    if (e.key === "Escape") closeRenameModal();
-  });
+    document.getElementById("rename-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") confirmRename();
+      if (e.key === "Escape") closeRenameModal();
+    });
+  } catch (error) {
+    console.error("Error initializing:", error);
+  }
 }
 
 function setupBookSearch() {
@@ -19,13 +23,11 @@ function setupBookSearch() {
   const dropdown = document.getElementById("book-dropdown");
 
   input.addEventListener("input", () => {
-    const q = input.value.toLowerCase();
-    const matches = books.filter(b => b.book.toLowerCase().includes(q));
-    renderBookDropdown(matches);
+    renderBookDropdown(allBooks.filter(b => b.book.toLowerCase().includes(input.value.toLowerCase())));
   });
 
   input.addEventListener("focus", () => {
-    renderBookDropdown(books);
+    renderBookDropdown(allBooks);
   });
 
   document.addEventListener("click", (e) => {
@@ -35,19 +37,17 @@ function setupBookSearch() {
   });
 }
 
-function renderBookDropdown(filtered) {
+function renderBookDropdown(books) {
   const dropdown = document.getElementById("book-dropdown");
-  const currentAbbrev = document.getElementById("modal-book-abbrev").value;
 
-  if (filtered.length === 0) {
+  if (books.length === 0) {
     dropdown.innerHTML = `<div class="book-option" style="color:var(--text-muted)">No books found</div>`;
     dropdown.classList.add("open");
     return;
   }
 
-  dropdown.innerHTML = filtered.map(b => `
-    <div class="book-option ${b.abbrev === currentAbbrev ? 'selected' : ''}" 
-         onclick="selectBook('${b.abbrev}', '${b.book}')">
+  dropdown.innerHTML = books.map(b => `
+    <div class="book-option" onclick="selectBook('${b.abbrev}', '${b.book}')">
       ${b.book}
     </div>
   `).join("");
@@ -79,15 +79,14 @@ async function confirmRename() {
   const newTitle = document.getElementById("rename-input").value.trim();
   if (!newTitle) return;
 
-  await BNApi.put(`/portals/${portalToRename}`, { title: newTitle });
-  closeRenameModal();
-  loadPortals();
+  try {
+    await BNApi.put(`/portals/${portalToRename}`, { title: newTitle });
+    closeRenameModal();
+    loadPortals();
+  } catch (error) {
+    console.error("Error renaming portal:", error);
+  }
 }
-
-document.getElementById("rename-input").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") confirmRename();
-  if (e.key === "Escape") closeRenameModal();
-});
 
 function renderPortals(portals) {
   const list = document.getElementById("portal-list");
@@ -114,18 +113,20 @@ function renderPortals(portals) {
 }
 
 async function loadPortals() {
-  allPortals = await BNApi.get('/portals');
-  renderPortals(allPortals);
-  const list = document.getElementById("portal-list");
-
-  document.getElementById("portal-search").oninput = (e) => {
-    const q = e.target.value.toLowerCase();
-    const filtered = allPortals.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.book.toLowerCase().includes(q)
-    );
-    renderPortals(filtered);
-  };
+  try {
+    allPortals = await BNApi.get('/portals');
+    renderPortals(allPortals);
+    document.getElementById("portal-search").oninput = (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = allPortals.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.book.toLowerCase().includes(q)
+      );
+      renderPortals(filtered);
+    };
+  } catch (error) {
+    console.error("Error loading portals:", error);
+  }
 }
 
 function formatPassage(p) {
@@ -141,22 +142,26 @@ function formatPassage(p) {
 }
 
 function openDeleteModal(event, btn) {
-    event.stopPropagation();
-    portalToDelete = btn.dataset.id;
-    document.getElementById("delete-portal-name").textContent = btn.dataset.title;
-    document.getElementById("delete-modal-overlay").classList.add("open");
+  event.stopPropagation();
+  portalToDelete = btn.dataset.id;
+  document.getElementById("delete-portal-name").textContent = btn.dataset.title;
+  document.getElementById("delete-modal-overlay").classList.add("open");
 }
 
 function closeDeleteModal() {
-    portalToDelete = null;
-    document.getElementById("delete-modal-overlay").classList.remove("open");
+  portalToDelete = null;
+  document.getElementById("delete-modal-overlay").classList.remove("open");
 }
 
 async function confirmDelete() {
-    if (!portalToDelete) return;
+  if (!portalToDelete) return;
+  try {
     await BNApi.del(`/portals/${portalToDelete}`);
     closeDeleteModal();
     loadPortals();
+  } catch (error) {
+    console.error("Error deleting portal:", error);
+  }
 }
 
 function openModal() {
@@ -165,10 +170,13 @@ function openModal() {
 
 function closeModal() {
   document.getElementById("modal-overlay").classList.remove("open");
+  resetModalFields();
+}
+
+function resetModalFields() {
   document.getElementById("modal-book-search").value = "";
   document.getElementById("modal-book-abbrev").value = "";
   document.getElementById("modal-book-name").value = "";
-  document.getElementById("modal-book-search").value = "";
   document.getElementById("modal-chapter-start").value = 1;
   document.getElementById("modal-verse-start").value = "";
   document.getElementById("modal-chapter-end").value = "";
@@ -202,18 +210,22 @@ async function savePortal() {
     });
   }
 
-  await BNApi.post('/portals', {
-    title,
-    book: bookName,
-    book_abbrev: abbrev,
-    chapter_start: chapterStart,
-    verse_start: verseStart,
-    chapter_end: chapterEnd,
-    verse_end: verseEnd
-  });
+  try {
+    await BNApi.post('/portals', {
+      title,
+      book: bookName,
+      book_abbrev: abbrev,
+      chapter_start: chapterStart,
+      verse_start: verseStart,
+      chapter_end: chapterEnd,
+      verse_end: verseEnd
+    });
 
-  closeModal();
-  loadPortals();
+    closeModal();
+    loadPortals();
+  } catch (error) {
+    console.error("Error saving portal:", error);
+  }
 }
 
 function openPortal(id) {

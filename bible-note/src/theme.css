@@ -24,6 +24,29 @@ html {
     --sidebar-width: 220px;
     --main-font: Inter, Avenir, Helvetica, Arial, sans-serif;
     --border-thickness: 1px;
+
+    --note-width: 300px;
+    --note-min-height: 80px;
+    --note-background: #1a1a1a;
+    --note-colour: #e8e8e8;
+    --note-border: none;
+    --note-font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    --note-font-size: 0.9rem;
+    --note-outline: none;
+    --note-line-height: 1.5;
+    --note-textarea-min-height: 60px;
+    --note-textarea-width: 100%
+    --note-padding: 0.75rem;
+    --note-box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --note-gap: 0.4rem;
+    --note-colour-bar-width: 12px;
+    --note-colour-bar-height: 12px;
+    --note-close-background: none;
+    --note-close-border: none;
+    --note-close-colour: #888;
+    --note-close-font-size: 0.75rem;
+    --note-close-padding: 0;
+    --note-close-hover-colour: #ff6b6b;
 }
 
 /* SCROLLBAR */
@@ -132,6 +155,82 @@ mark {
 .btn-save:hover {
     opacity: 0.85;
 }
+
+/* NOTES */
+.note-box {
+  position: absolute;
+  width: var(--note-width);
+  min-height: var(--note-min-height);
+  background: var(--note-background);
+  padding: var(--note-padding);
+  pointer-events: all;
+  cursor: grab;
+  box-shadow: var(--note-box-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: var(--note-gap);
+}
+
+.note-box:active { cursor: grabbing; }
+
+.note-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.note-colour-bar {
+  width: var(--note-colour-bar-width);
+  height: var(--note-colour-bar-height);
+  flex-shrink: 0;
+}
+
+.note-close {
+  background: var(--note-close-background);
+  border: var(--note-close-border);
+  color: var(--note-close-colour);
+  cursor: pointer;
+  font-size: var(--note-close-font-size);
+  padding: var(--note-close-padding);
+}
+
+.note-close:hover { color: var(--note-close-hover-colour); }
+
+.note-textarea {
+  background: var(--note-background);
+  border: var(--note-border);
+  color: var(--note-colour);
+  font-family: var(--note-font-family);
+  font-size: var(--note-font-size);
+  resize: none;
+  outline: var(--note-outline);
+  line-height: var(--note-line-height);
+  min-height: var(--note-min-height);
+  width: var(--note-textarea-width);
+}
+
+.note-resize-handle {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  opacity: 0.4;
+}
+
+.note-resize-handle::before {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+}
+
+.note-resize-handle:hover { opacity: 1; }
 
 /* FORM ELEMENTS */
 .field {

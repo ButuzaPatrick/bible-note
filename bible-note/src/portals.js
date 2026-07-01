@@ -5,13 +5,60 @@ let portalToRename = null;
 
 async function init() {
   books = await BNApi.get('/books');
-
-  const select = document.getElementById("modal-book");
-  select.innerHTML = books.map(b =>
-    `<option value="${b.abbrev}" data-name="${b.book}">${b.book}</option>`
-  ).join("");
-
+  setupBookSearch();
   loadPortals();
+
+  document.getElementById("rename-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") confirmRename();
+    if (e.key === "Escape") closeRenameModal();
+  });
+}
+
+function setupBookSearch() {
+  const input = document.getElementById("modal-book-search");
+  const dropdown = document.getElementById("book-dropdown");
+
+  input.addEventListener("input", () => {
+    const q = input.value.toLowerCase();
+    const matches = books.filter(b => b.book.toLowerCase().includes(q));
+    renderBookDropdown(matches);
+  });
+
+  input.addEventListener("focus", () => {
+    renderBookDropdown(books);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".book-search-wrapper")) {
+      dropdown.classList.remove("open");
+    }
+  });
+}
+
+function renderBookDropdown(filtered) {
+  const dropdown = document.getElementById("book-dropdown");
+  const currentAbbrev = document.getElementById("modal-book-abbrev").value;
+
+  if (filtered.length === 0) {
+    dropdown.innerHTML = `<div class="book-option" style="color:var(--text-muted)">No books found</div>`;
+    dropdown.classList.add("open");
+    return;
+  }
+
+  dropdown.innerHTML = filtered.map(b => `
+    <div class="book-option ${b.abbrev === currentAbbrev ? 'selected' : ''}" 
+         onclick="selectBook('${b.abbrev}', '${b.book}')">
+      ${b.book}
+    </div>
+  `).join("");
+  dropdown.classList.add("open");
+}
+
+function selectBook(abbrev, name) {
+  document.getElementById("modal-book-abbrev").value = abbrev;
+  document.getElementById("modal-book-name").value = name;
+  document.getElementById("modal-book-search").value = name;
+  document.getElementById("book-dropdown").classList.remove("open");
 }
 
 function openRenameModal(event, id, currentTitle) {
@@ -118,18 +165,32 @@ function openModal() {
 
 function closeModal() {
   document.getElementById("modal-overlay").classList.remove("open");
+  document.getElementById("modal-book-search").value = "";
+  document.getElementById("modal-book-abbrev").value = "";
+  document.getElementById("modal-book-name").value = "";
+  document.getElementById("modal-book-search").value = "";
+  document.getElementById("modal-chapter-start").value = 1;
+  document.getElementById("modal-verse-start").value = "";
+  document.getElementById("modal-chapter-end").value = "";
+  document.getElementById("modal-verse-end").value = "";
+  document.getElementById("modal-title").value = "";
+  document.getElementById("book-dropdown").classList.remove("open");
 }
 
 async function savePortal() {
-  const select = document.getElementById("modal-book");
-  const abbrev = select.value;
-  const bookName = select.options[select.selectedIndex].dataset.name;
+  const abbrev = document.getElementById("modal-book-abbrev").value;
+  const bookName = document.getElementById("modal-book-name").value;
+
+  if (!abbrev) {
+    document.getElementById("modal-book-search").focus();
+    return;
+  }
 
   const chapterStart = parseInt(document.getElementById("modal-chapter-start").value);
   const verseStart = parseInt(document.getElementById("modal-verse-start").value) || null;
   const chapterEnd = parseInt(document.getElementById("modal-chapter-end").value) || null;
   const verseEnd = parseInt(document.getElementById("modal-verse-end").value) || null;
-  let title = document.getElementById("modal-title").value || null; 
+  let title = document.getElementById("modal-title").value || null;
 
   if (!title) {
     title = formatPassage({

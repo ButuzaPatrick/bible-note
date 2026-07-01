@@ -22,7 +22,12 @@
 
     <div class="field">
       <label>Book</label>
-      <select id="modal-book"></select>
+      <div class="book-search-wrapper">
+        <input type="text" id="modal-book-search" placeholder="Search for a book..." autocomplete="off" />
+        <div id="book-dropdown" class="book-dropdown"></div>
+        <input type="hidden" id="modal-book-abbrev" />
+        <input type="hidden" id="modal-book-name" />
+      </div>
     </div>
 
     <div class="field-row">

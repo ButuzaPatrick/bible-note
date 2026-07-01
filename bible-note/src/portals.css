@@ -204,3 +204,38 @@ h1 {
 #portal-search:focus {
   border-color: var(--accent);
 }
+
+.book-search-wrapper {
+  position: relative;
+}
+
+.book-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-top: none;
+  z-index: 300;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+}
+
+.book-dropdown.open {
+  display: block;
+}
+
+.book-option {
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: background 0.1s;
+}
+
+.book-option:hover, .book-option.selected {
+  background: var(--surface);
+  color: var(--accent);
+}

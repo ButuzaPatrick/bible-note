@@ -583,3 +583,16 @@ mark.active-highlight {
   color: var(--text-muted);
   font-style: italic;
 }
+
+.layer-title {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  padding: 0.15rem 0.5rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}

@@ -848,12 +848,21 @@ async function runPanelSearch(query) {
     html += `<h4 class="results-heading">Notes (${data.notes.length})</h4>`;
     html += data.notes.map(n => `
       <div class="result-card" onclick="goToSearchResult('${n.verse.book_abbrev}', ${n.verse.chapter})">
-        <span class="result-ref">${n.verse.book} ${n.verse.chapter}:${n.verse.verse_number}</span>
+
+        <span class="result-ref">
+          ${n.verse.book} ${n.verse.chapter}:${n.verse.verse_number}
+
+          ${n.layer_title ? `<span class="layer-title">${n.layer_title}</span>` : ""}
+        </span>
+
         <p class="result-text">${highlightMatch(n.content, query)}</p>
         <p class="result-meta">Note on: ${n.verse.text}</p>
+
       </div>
     `).join("");
   }
+
+
 
   if (data.verses.length > 0) {
     html += `<h4 class="results-heading">Verses (${data.verses.length})</h4>`;

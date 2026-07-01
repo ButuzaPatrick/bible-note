@@ -6,5 +6,5 @@ def run(book=None, chapter=None):
         "--border": "#e0e0e0",
         "--text": "#1a1a1a",
         "--text-muted": "#666",
-        "--accent": "#0066cc"
+        "--accent": "#0066cc",
     }

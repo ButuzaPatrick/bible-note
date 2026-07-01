@@ -6,10 +6,10 @@ server:
 
 tidy:
 	@echo "formating..."
-	ruff format .
+	venv/Scripts/ruff format .
 	@echo "formating complete"
 	@echo "linting..."
-	ruff check .
+	venv/Scripts/ruff check .
 
 db-migrate:
 	venv/Scripts/alembic revision --autogenerate -m "$(message)"

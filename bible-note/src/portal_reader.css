@@ -415,7 +415,7 @@ mark.active-highlight {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  width: fit-content;
 }
 
 #toolbelt-buttons {
